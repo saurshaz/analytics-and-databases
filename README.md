@@ -12,6 +12,8 @@ This workspace contains two complementary research projects exploring analytical
 
 A comprehensive study quantifying performance differences across 20 complex SQL queries on real-world analytical workloads. Tests embed vectorized OLAP (DuckDB 0.9.2) against row-oriented RDBMS (PostgreSQL 15) using 128M NYC Taxi records.
 
+Prerequisites : download the dataset into root folder in a folder named [`NYC Yellow Taxi Record 23-24-25`](https://www.kaggle.com/datasets/qweemreee/nyc-yellow-taxi-record-23-24-2) (with parquet files)
+
 **Key Features:**
 - 20 complex SQL queries covering aggregations, joins, window functions
 - Automated benchmark runner with stable result collection
@@ -20,6 +22,7 @@ A comprehensive study quantifying performance differences across 20 complex SQL 
 - Complete blog post with findings and recommendations
 
 **Quick Start:**
+
 ```bash
 cd analytical-db-knockout
 pip install -e .
