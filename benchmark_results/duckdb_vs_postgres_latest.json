@@ -1,0 +1,1129 @@
+{
+  "duckdb": {
+    "1": {
+      "avg_time": 0.0003720004970091395,
+      "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+      "measured_runs": [
+        {
+          "elapsed": 0.0003993239952251315,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.0003446769987931475,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.0026685930060921237,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "2": {
+      "avg_time": 0.00014011199527885765,
+      "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+      "measured_runs": [
+        {
+          "elapsed": 0.00015272299060598016,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.00012750099995173514,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.0002777089976007119,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "3": {
+      "avg_time": 0.00023435050388798118,
+      "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+      "measured_runs": [
+        {
+          "elapsed": 0.0002367770066484809,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.00023192400112748146,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.0003332799969939515,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "4": {
+      "avg_time": 0.0002733235087362118,
+      "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+      "measured_runs": [
+        {
+          "elapsed": 0.00028384700999595225,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.00026280000747647136,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.00042337700142525136,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "5": {
+      "avg_time": 0.00011578249541344121,
+      "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+      "measured_runs": [
+        {
+          "elapsed": 0.00012937599967699498,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.00010218899114988744,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.0002237590088043362,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "6": {
+      "avg_time": 0.00024206549278460443,
+      "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+      "measured_runs": [
+        {
+          "elapsed": 0.00024990199017338455,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.0002342289953958243,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.0003391700010979548,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "7": {
+      "avg_time": 0.0001139404994319193,
+      "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+      "measured_runs": [
+        {
+          "elapsed": 0.0001273870002478361,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.0001004939986160025,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.000209901001653634,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "8": {
+      "avg_time": 0.00021504850155906752,
+      "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+      "measured_runs": [
+        {
+          "elapsed": 0.00022910500410944223,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.0002009919990086928,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.000296120997518301,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "9": {
+      "avg_time": 0.00016492000577272847,
+      "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+      "measured_runs": [
+        {
+          "elapsed": 0.00018187600653618574,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.0001479640050092712,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.0002779720089165494,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "10": {
+      "avg_time": 0.0001850789994932711,
+      "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+      "measured_runs": [
+        {
+          "elapsed": 0.00020553199283313006,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.00016462600615341216,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.000311701005557552,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "11": {
+      "avg_time": 0.00019580200023483485,
+      "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+      "measured_runs": [
+        {
+          "elapsed": 0.0002177580026909709,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.0001738459977786988,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.0003035060071852058,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "12": {
+      "avg_time": 0.00017235850100405514,
+      "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+      "measured_runs": [
+        {
+          "elapsed": 0.00018101399473380297,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.0001637030072743073,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.0002669560053618625,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "13": {
+      "avg_time": 0.00024229800328612328,
+      "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+      "measured_runs": [
+        {
+          "elapsed": 0.00030180100293364376,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.0001827950036386028,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.000407659012125805,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "14": {
+      "avg_time": 0.00018787500448524952,
+      "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+      "measured_runs": [
+        {
+          "elapsed": 0.00024025799939408898,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.00013549200957641006,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.00035654900420922786,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "15": {
+      "avg_time": 0.00011710399849107489,
+      "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+      "measured_runs": [
+        {
+          "elapsed": 0.00012885000614915043,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.00010535799083299935,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.00020243499602656811,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "16": {
+      "avg_time": 0.00010456900054123253,
+      "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+      "measured_runs": [
+        {
+          "elapsed": 0.0001135280035668984,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 9.560999751556665e-05,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.00014519199612550437,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "17": {
+      "avg_time": 0.00015596450248267502,
+      "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+      "measured_runs": [
+        {
+          "elapsed": 0.00017768600082490593,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.0001342430041404441,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.0002779890055535361,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "18": {
+      "avg_time": 0.00015368450112873688,
+      "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+      "measured_runs": [
+        {
+          "elapsed": 0.00014339399058371782,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.00016397501167375594,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.00020994499209336936,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "19": {
+      "avg_time": 0.0001395304934703745,
+      "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+      "measured_runs": [
+        {
+          "elapsed": 0.0001525739935459569,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.00012648699339479208,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.00023787000100128353,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "20": {
+      "avg_time": 0.00013406850484898314,
+      "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+      "measured_runs": [
+        {
+          "elapsed": 0.00014177100092638284,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.00012636600877158344,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.00022316499962471426,
+          "error": "Catalog Error: Table with name yellow_taxi does not exist!\nDid you mean \"yellow_",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    }
+  },
+  "generated_at": "2026-04-18T09:27:09.546624+00:00",
+  "name": "duckdb_vs_postgres",
+  "postgres": {
+    "1": {
+      "avg_time": 0.0002455729991197586,
+      "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...VendorID, SUM(total_amount) as ",
+      "measured_runs": [
+        {
+          "elapsed": 0.00025429599918425083,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...VendorID, SUM(total_amount) as ",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.00023684999905526638,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...VendorID, SUM(total_amount) as ",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.004470443993341178,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...VendorID, SUM(total_amount) as ",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "2": {
+      "avg_time": 0.00042509299964876845,
+      "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ..., COUNT(DISTINCT VendorID) as a",
+      "measured_runs": [
+        {
+          "elapsed": 0.00019089499255642295,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ..., COUNT(DISTINCT VendorID) as a",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.000659291006741114,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ..., COUNT(DISTINCT VendorID) as a",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.00025334200472570956,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ..., COUNT(DISTINCT VendorID) as a",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "3": {
+      "avg_time": 0.0002677260054042563,
+      "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...nt) as total_revenue, COUNT(*) ",
+      "measured_runs": [
+        {
+          "elapsed": 0.0003063890035264194,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...nt) as total_revenue, COUNT(*) ",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.00022906300728209317,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...nt) as total_revenue, COUNT(*) ",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.0005318129988154396,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...nt) as total_revenue, COUNT(*) ",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "4": {
+      "avg_time": 0.00020986249728593975,
+      "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...WITHIN GROUP (ORDER BY trip_dis",
+      "measured_runs": [
+        {
+          "elapsed": 0.00027132399554830045,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...WITHIN GROUP (ORDER BY trip_dis",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.00014840099902357906,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...WITHIN GROUP (ORDER BY trip_dis",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.00033351799356751144,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...WITHIN GROUP (ORDER BY trip_dis",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "5": {
+      "avg_time": 0.0001844514990807511,
+      "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...fare, ROUND(MAX(fare_amount), 2",
+      "measured_runs": [
+        {
+          "elapsed": 0.00011797300248872489,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...fare, ROUND(MAX(fare_amount), 2",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.0002509299956727773,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...fare, ROUND(MAX(fare_amount), 2",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.00014493400522042066,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...fare, ROUND(MAX(fare_amount), 2",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "6": {
+      "avg_time": 0.0001005990052362904,
+      "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...ROUND(SUM(total_amount), 2) as ",
+      "measured_runs": [
+        {
+          "elapsed": 0.00010698000551201403,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...ROUND(SUM(total_amount), 2) as ",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 9.421800496056676e-05,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...ROUND(SUM(total_amount), 2) as ",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.00028889298846479505,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...ROUND(SUM(total_amount), 2) as ",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "7": {
+      "avg_time": 0.00019638849335024133,
+      "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...OUP (ORDER BY trip_distance) as",
+      "measured_runs": [
+        {
+          "elapsed": 0.00021325898705981672,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...OUP (ORDER BY trip_distance) as",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.00017951799964066595,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...OUP (ORDER BY trip_distance) as",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.00032524598645977676,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...OUP (ORDER BY trip_distance) as",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "8": {
+      "avg_time": 0.00022213500051293522,
+      "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...tpep_pickup_datetime)) / 60 as ",
+      "measured_runs": [
+        {
+          "elapsed": 0.0002161230077035725,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...tpep_pickup_datetime)) / 60 as ",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.00022814699332229793,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...tpep_pickup_datetime)) / 60 as ",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.00037346499448176473,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...tpep_pickup_datetime)) / 60 as ",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "9": {
+      "avg_time": 0.0002240564936073497,
+      "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...ROUND(SUM(total_amount), 2) as ",
+      "measured_runs": [
+        {
+          "elapsed": 0.00023412398877553642,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...ROUND(SUM(total_amount), 2) as ",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.00021398899843916297,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...ROUND(SUM(total_amount), 2) as ",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.0003022370074177161,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...ROUND(SUM(total_amount), 2) as ",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "10": {
+      "avg_time": 0.0002656755023053847,
+      "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...ROUND(AVG(trip_distance), 2) as",
+      "measured_runs": [
+        {
+          "elapsed": 0.0002718640025705099,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...ROUND(AVG(trip_distance), 2) as",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.00025948700204025954,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...ROUND(AVG(trip_distance), 2) as",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.0003341429983265698,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...ROUND(AVG(trip_distance), 2) as",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "11": {
+      "avg_time": 0.00022312549845082685,
+      "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...VendorID, SUM(total_amount) as ",
+      "measured_runs": [
+        {
+          "elapsed": 0.00020446100097615272,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...VendorID, SUM(total_amount) as ",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.000241789995925501,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...VendorID, SUM(total_amount) as ",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.00025155699404422194,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...VendorID, SUM(total_amount) as ",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "12": {
+      "avg_time": 0.0002247400043415837,
+      "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...HIN GROUP (ORDER BY fare_amount",
+      "measured_runs": [
+        {
+          "elapsed": 0.0002899390092352405,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...HIN GROUP (ORDER BY fare_amount",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.00015954099944792688,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...HIN GROUP (ORDER BY fare_amount",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.00037098999018780887,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...HIN GROUP (ORDER BY fare_amount",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "13": {
+      "avg_time": 0.00028146350086899474,
+      "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...tetime) as trip_date, VendorID,",
+      "measured_runs": [
+        {
+          "elapsed": 0.0002965589956147596,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...tetime) as trip_date, VendorID,",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.00026636800612322986,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...tetime) as trip_date, VendorID,",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.00029239599825814366,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...tetime) as trip_date, VendorID,",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "14": {
+      "avg_time": 0.00017511050100438297,
+      "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...AR_POP(total_amount), 2) as var",
+      "measured_runs": [
+        {
+          "elapsed": 0.0001010429987218231,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...AR_POP(total_amount), 2) as var",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.00024917800328694284,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...AR_POP(total_amount), 2) as var",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.00023984599101822823,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...AR_POP(total_amount), 2) as var",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "15": {
+      "avg_time": 9.169550321530551e-05,
+      "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...ance, ROUND(AVG(fare_amount), 2",
+      "measured_runs": [
+        {
+          "elapsed": 8.714900468476117e-05,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...ance, ROUND(AVG(fare_amount), 2",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 9.624200174584985e-05,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...ance, ROUND(AVG(fare_amount), 2",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.0002115159877575934,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...ance, ROUND(AVG(fare_amount), 2",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "16": {
+      "avg_time": 0.0001244334998773411,
+      "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...ount, ROUND(AVG(fare_amount), 2",
+      "measured_runs": [
+        {
+          "elapsed": 0.00015092499961610883,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...ount, ROUND(AVG(fare_amount), 2",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 9.794200013857335e-05,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...ount, ROUND(AVG(fare_amount), 2",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.00015808299940545112,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...ount, ROUND(AVG(fare_amount), 2",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "17": {
+      "avg_time": 0.00010239200491923839,
+      "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...T PULocationID, SUM(total_amoun",
+      "measured_runs": [
+        {
+          "elapsed": 0.00010856000881176442,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...T PULocationID, SUM(total_amoun",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 9.622400102671236e-05,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...T PULocationID, SUM(total_amoun",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.0002562180015956983,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...T PULocationID, SUM(total_amoun",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "18": {
+      "avg_time": 0.00025627099967096,
+      "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...n_fare, STDDEV_POP(total_amount",
+      "measured_runs": [
+        {
+          "elapsed": 0.00027230900013819337,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...n_fare, STDDEV_POP(total_amount",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.00024023299920372665,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...n_fare, STDDEV_POP(total_amount",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.0003490519884508103,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...n_fare, STDDEV_POP(total_amount",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "19": {
+      "avg_time": 0.0002696820010896772,
+      "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...p_datetime) as month, COUNT(*) ",
+      "measured_runs": [
+        {
+          "elapsed": 0.00024317500356119126,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...p_datetime) as month, COUNT(*) ",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.00029618899861816317,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...p_datetime) as month, COUNT(*) ",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.00039393900078721344,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...p_datetime) as month, COUNT(*) ",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    },
+    "20": {
+      "avg_time": 0.0002561945002526045,
+      "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...trip_date, VendorID, COUNT(*) a",
+      "measured_runs": [
+        {
+          "elapsed": 0.0002605500048957765,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...trip_date, VendorID, COUNT(*) a",
+          "rows": 0,
+          "status": "FAIL"
+        },
+        {
+          "elapsed": 0.00025183899560943246,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...trip_date, VendorID, COUNT(*) a",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ],
+      "rows": 0,
+      "status": "FAIL",
+      "warmup_runs": [
+        {
+          "elapsed": 0.00025921199994627386,
+          "error": "relation \"yellow_taxi\" does not exist\nLINE 1: ...trip_date, VendorID, COUNT(*) a",
+          "rows": 0,
+          "status": "FAIL"
+        }
+      ]
+    }
+  },
+  "summary": {}
+}
