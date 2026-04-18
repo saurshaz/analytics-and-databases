@@ -1,0 +1,10 @@
+{
+  "raw_dir": "NYC Yellow Taxi Record 23-24-25",
+  "processed_dir": "data/processed",
+  "max_workers": 8,
+  "compression": "uncompressed",
+  "batch_size": 10000,
+  "enable_dedup": false,
+  "registry_path": "data_registry.json",
+  "description": "Maximum speed (8 workers, no compression)"
+}
