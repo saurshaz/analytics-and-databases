@@ -1,0 +1,32 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: nyc_taxi_pg
+    environment:
+      POSTGRES_DB: nyc_taxi
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./analytical-db-knockout/schema_postgres.sql:/docker-entrypoint-initdb.d/01_schema.sql
+    command:
+      - "postgres"
+      - "-c"
+      - "shared_buffers=2GB"
+      - "-c"
+      - "work_mem=256MB"
+      - "-c"
+      - "maintenance_work_mem=1GB"
+      - "-c"
+      - "max_parallel_workers=8"
+      - "-c"
+      - "max_parallel_workers_per_gather=4"
+      - "-c"
+      - "effective_cache_size=6GB"
+      - "-c"
+      - "random_page_cost=1.1"
+
+volumes:
+  pg_data:

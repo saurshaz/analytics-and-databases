@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=60"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "analytical-db-knockout"
+version = "1.0.0"
+description = "DuckDB vs PostgreSQL performance benchmarks on NYC Taxi data"
+authors = [{name = "Data Engineering Team"}]
+requires-python = ">=3.9"
+dependencies = [
+    "duckdb>=0.9.0",
+    "psycopg2-binary>=2.9.0",
+    "pandas>=1.5.0",
+    "pyarrow>=12.0.0",
+    "click>=8.0.0",
+    "tabulate>=0.9.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "black>=23.0",
+    "flake8>=6.0",
+    "mypy>=1.0",
+]
