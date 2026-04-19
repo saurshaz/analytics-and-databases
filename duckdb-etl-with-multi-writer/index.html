@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>analytics-and-databases · Fast Lean ETL</title>
+<link href="https://cdn.jsdelivr.net/npm/fontsource-ibm-plex-mono@5.0.12/400.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/fontsource-ibm-plex-mono@5.0.12/500.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/fontsource-syne@5.0.12/400.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/fontsource-syne@5.0.12/700.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/fontsource-syne@5.0.12/800.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0c10;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;font-family:'Syne',sans-serif}
+.deck{width:100%;max-width:780px;user-select:none}
+.stage{position:relative;width:100%;height:500px;overflow:hidden;border-radius:16px;border:0.5px solid rgba(255,255,255,.12);background:#0e1117}
+.slide{position:absolute;inset:0;padding:48px 52px 44px;display:flex;flex-direction:column;justify-content:space-between;opacity:0;transform:translateX(60px);transition:opacity .45s cubic-bezier(.4,0,.2,1),transform .45s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.slide.active{opacity:1;transform:translateX(0);pointer-events:all}
+.slide.exit{opacity:0;transform:translateX(-60px)}
+.slide-dark{background:#0e1117;color:#e8eaf0}
+.slide-teal{background:#04342C;color:#9FE1CB}
+.slide-amber{background:#412402;color:#FAC775}
+.slide-blue{background:#042C53;color:#B5D4F4}
+.slide-mid{background:#17191f;color:#e8eaf0}
+.tag{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:400;letter-spacing:.08em;opacity:.55;margin-bottom:14px;text-transform:uppercase}
+h1{font-size:40px;font-weight:800;line-height:1.05;margin-bottom:10px}
+h2{font-size:26px;font-weight:700;line-height:1.2;margin-bottom:8px}
+.sub{font-size:13px;opacity:.65;line-height:1.6;max-width:520px}
+.card{background:rgba(255,255,255,.05);border:0.5px solid rgba(255,255,255,.12);border-radius:10px;padding:14px 16px}
+.stat-big{font-size:32px;font-weight:800;line-height:1;margin-bottom:4px}
+.stat-label{font-size:11px;opacity:.6;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.05em}
+.check{color:#5DCAA5;margin-right:8px;font-size:13px}
+.item{font-size:13px;padding:5px 0;opacity:.85;display:flex;align-items:flex-start;gap:6px}
+.sep{height:1px;background:rgba(255,255,255,.08);margin:12px 0}
+.code-block{background:rgba(0,0,0,.35);border-radius:8px;padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:11px;line-height:1.7;color:#9FE1CB;margin-top:10px;border:0.5px solid rgba(255,255,255,.08);white-space:pre-wrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:8px}
+.pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.pill{font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 10px;border-radius:18px;border:0.5px solid rgba(255,255,255,.15);opacity:.8}
+.url{font-family:'IBM Plex Mono',monospace;font-size:11px;opacity:.4;margin-top:6px}
+.progress-bar{height:2px;background:rgba(255,255,255,.06);border-radius:1px;position:relative;overflow:hidden;margin-bottom:6px}
+.progress-fill{height:100%;background:#5DCAA5;border-radius:1px;transition:width .4s cubic-bezier(.4,0,.2,1)}
+.mode-table{width:100%;font-size:12px;border-collapse:collapse;margin-top:8px}
+.mode-table td{padding:6px 8px;border-bottom:0.5px solid rgba(255,255,255,.07);font-family:'IBM Plex Mono',monospace;vertical-align:middle}
+.mode-table tr:last-child td{border:none}
+.mode-table .cmd{color:#FAC775;text-align:right}
+.badge{display:inline-flex;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:10px;padding:3px 8px;border-radius:4px;font-weight:500;margin-bottom:6px}
+.b-teal{background:#0F6E56;color:#9FE1CB}
+.b-amber{background:#854F0B;color:#FAC775}
+.b-coral{background:#993C1D;color:#F5C4B3}
+.b-blue{background:#185FA5;color:#B5D4F4}
+.nav{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding:0 4px}
+.dots{display:flex;gap:6px;align-items:center}
+.dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.2);transition:all .3s;cursor:pointer;border:none;padding:0}
+.dot.on{width:18px;border-radius:3px;background:#5DCAA5}
+.nav-btn{background:none;border:0.5px solid rgba(255,255,255,.2);border-radius:8px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:rgba(255,255,255,.5);transition:border-color .2s,color .2s;padding:0 12px;gap:6px;white-space:nowrap;font-family:'Syne',sans-serif}
+.nav-btn:hover{border-color:rgba(255,255,255,.5);color:#fff}
+.nav-btn:disabled{opacity:.3;cursor:default}
+.nav-btn.download-btn{font-size:12px;border-color:rgba(93,202,165,.3)}
+.nav-btn.download-btn:hover{border-color:rgba(93,202,165,.7);color:#5DCAA5}
+.nav-btn.download-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.hero-accent{color:#5DCAA5}
+#pdf-overlay{position:fixed;inset:0;background:rgba(10,12,16,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1000;opacity:0;pointer-events:none;transition:opacity .3s}
+#pdf-overlay.visible{opacity:1;pointer-events:all}
+#pdf-overlay .spinner{width:40px;height:40px;border:3px solid rgba(93,202,165,.2);border-top-color:#5DCAA5;border-radius:50%;animation:spin .8s linear infinite;margin-bottom:16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+#pdf-overlay .overlay-text{font-family:'IBM Plex Mono',monospace;font-size:13px;color:#9FE1CB;opacity:.8}
+#pdf-overlay .overlay-sub{font-size:11px;opacity:.4;margin-top:6px;font-family:'IBM Plex Mono',monospace}
+#pdf-render-area{position:fixed;left:-9999px;top:0;width:780px;z-index:-1}
+.pdf-slide-page{width:780px;height:500px;padding:48px 52px 44px;display:flex;flex-direction:column;justify-content:space-between;page-break-after:always;position:relative}
+.pdf-slide-page:last-child{page-break-after:auto}
+@media(max-width:850px){
+  .deck{max-width:100%;padding:0 8px}
+  .stage{height:520px;border-radius:12px}
+  .slide{padding:36px 28px 32px}
+  h1{font-size:32px} h2{font-size:22px}
+  .grid2,.grid3{grid-template-columns:1fr}
+  .nav-btn span.btn-label{display:none}
+  .nav-btn{padding:0 8px}
+}
+</style>
+</head>
+<body>
+<div class="deck">
+  <div class="stage" id="stage"></div>
+  <div class="nav">
+    <div class="dots" id="dots"></div>
+    <div style="display:flex;gap:6px">
+      <button class="nav-btn" id="prev" aria-label="Previous slide">&#8592;</button>
+      <button class="nav-btn" id="next" aria-label="Next slide">&#8594;</button>
+      <button class="nav-btn download-btn" id="download" aria-label="Download as PDF" onclick="exportPDF()">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span class="btn-label">Download PDF</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="pdf-overlay">
+  <div class="spinner"></div>
+  <div class="overlay-text" id="overlay-text">Generating PDF…</div>
+  <div class="overlay-sub" id="overlay-sub">Preparing slides for export</div>
+</div>
+
+<div id="pdf-render-area"></div>
+
+<script>
+const slides = [
+  { bg:'slide-dark', render:`<div>
+    <div class="tag">analytics-and-databases &nbsp;·&nbsp; April 2026</div>
+    <h1><span class="hero-accent">Fast Lean ETL</span><br>with Faster Features</h1>
+    <p class="sub" style="margin-top:12px">Safe multi-writer DuckDB pipelines at scale — production-ready, zero external dependencies.</p>
+  </div>
+  <div>
+    <div class="url">github.com/saurshaz/analytics-and-databases</div>
+    <div class="pill-row">
+      <span class="pill">Unified Pipeline v2.0</span>
+      <span class="pill">1.3B rows · 11 seconds</span>
+      <span class="pill">Zero deps</span>
+    </div>
+  </div>` },
+
+  { bg:'slide-mid', render:`<div>
+    <div class="tag">The problem</div>
+    <h2>The ETL concurrency bottleneck</h2>
+    <p class="sub">DuckDB lacks native multi-writer support. Parallel ingestion triggers race conditions, conflicts, or data loss.</p>
+  </div>
+  <div>
+    <div class="code-block">Process A: INSERT INTO trips... <span style="color:#E24B4A">[LOCKS TABLE]</span>
+Process B: INSERT INTO trips... <span style="color:#E24B4A">[WAITS/FAILS] ✗</span>
+Process C: INSERT INTO trips... <span style="color:#E24B4A">[TIMEOUT]   ✗</span></div>
+    <div class="grid2" style="margin-top:14px">
+      <div class="card"><div class="stat-label">Traditional approach</div><div style="font-size:12px;margin-top:6px;opacity:.7">Redis · Kafka · Postgres<br>Heavy infra, high TCO</div></div>
+      <div class="card"><div class="stat-label">The tradeoff</div><div style="font-size:12px;margin-top:6px;opacity:.7">Speed vs safety<br>Complex debugging</div></div>
+    </div>
+  </div>` },
+
+  { bg:'slide-teal', render:`<div>
+    <div class="tag">The solution</div>
+    <h2>Registry locking</h2>
+    <p class="sub">Lightweight, atomic, file-based lock manager that serializes writes safely — no distributed systems needed.</p>
+  </div>
+  <div>
+    <div class="code-block" style="color:#9FE1CB">{
+  "lock_id": "etl_2024_worker_a",
+  "writer_id": "worker_a",
+  "acquired_at": "2026-04-19T10:30:00Z",
+  "status": "active"
+}</div>
+    <div class="grid2" style="margin-top:12px">
+      <div class="card"><div class="item"><span class="check">✓</span>Zero external dependencies</div><div class="item"><span class="check">✓</span>Atomic fcntl operations</div></div>
+      <div class="card"><div class="item"><span class="check">✓</span>&lt;1% coordination overhead</div><div class="item"><span class="check">✓</span>Built-in audit trail</div></div>
+    </div>
+  </div>` },
+
+  { bg:'slide-blue', render:`<div>
+    <div class="tag">Architecture</div>
+    <h2>Unified Pipeline v2.0</h2>
+    <p class="sub">One codebase. Five modes. Zero fragmentation.</p>
+  </div>
+  <div>
+    <table class="mode-table">
+      <tr><td style="color:#85B7EB;font-weight:500">etl</td><td style="opacity:.7">Standard incremental load → DuckDB table</td><td class="cmd">make etl</td></tr>
+      <tr><td style="color:#85B7EB;font-weight:500">partition</td><td style="opacity:.7">Hive-partitioned storage → year/month dirs</td><td class="cmd">make partition</td></tr>
+      <tr><td style="color:#85B7EB;font-weight:500">query</td><td style="opacity:.7">Analytics benchmarks → results + timing</td><td class="cmd">make query</td></tr>
+      <tr><td style="color:#85B7EB;font-weight:500">validate</td><td style="opacity:.7">Data quality checks → integrity report</td><td class="cmd">make validate</td></tr>
+      <tr><td style="color:#85B7EB;font-weight:500">both</td><td style="opacity:.7">Full pipeline → table + partitioned files</td><td class="cmd">--mode both</td></tr>
+    </table>
+  </div>` },
+
+  { bg:'slide-dark', render:`<div>
+    <div class="tag">Performance</div>
+    <h2><span class="hero-accent">1.3 billion rows</span> in 11 seconds</h2>
+    <p class="sub">Live production run — fast preset, 8 workers, no compression.</p>
+  </div>
+  <div>
+    <div class="grid3">
+      <div class="card"><div class="stat-big" style="color:#5DCAA5">390M</div><div class="stat-label">2023 rows</div><div style="font-size:10px;margin-top:4px;opacity:.5;font-family:'IBM Plex Mono',monospace">12.3B rows/sec</div></div>
+      <div class="card"><div class="stat-big" style="color:#5DCAA5">431M</div><div class="stat-label">2024 rows</div><div style="font-size:10px;margin-top:4px;opacity:.5;font-family:'IBM Plex Mono',monospace">89M rows/sec</div></div>
+      <div class="card"><div class="stat-big" style="color:#5DCAA5">480M</div><div class="stat-label">2025 rows</div><div style="font-size:10px;margin-top:4px;opacity:.5;font-family:'IBM Plex Mono',monospace">82.7M rows/sec</div></div>
+    </div>
+    <div class="card" style="margin-top:12px;display:flex;gap:28px;align-items:center">
+      <div><div class="stat-big" style="color:#FAC775">122M</div><div class="stat-label">avg rows/sec</div></div>
+      <div style="height:36px;width:0.5px;background:rgba(255,255,255,.1)"></div>
+      <div><div class="stat-big" style="color:#FAC775">11s</div><div class="stat-label">total time</div></div>
+      <div style="height:36px;width:0.5px;background:rgba(255,255,255,.1)"></div>
+      <div><div class="stat-big" style="color:#FAC775">&lt;1%</div><div class="stat-label">registry overhead</div></div>
+    </div>
+  </div>` },
+
+  { bg:'slide-mid', render:`<div>
+    <div class="tag">Configuration</div>
+    <h2>Tune throughput vs storage</h2>
+    <p class="sub">Four deployment presets for different constraints.</p>
+  </div>
+  <div>
+    <table class="mode-table">
+      <thead><tr><td style="opacity:.4">preset</td><td style="opacity:.4">workers</td><td style="opacity:.4">compression</td><td style="opacity:.4">throughput</td><td style="opacity:.4">best for</td></tr></thead>
+      <tr><td style="color:#FAC775">fast ⚡</td><td>8</td><td>none</td><td style="color:#5DCAA5">5.6M/sec</td><td>bulk loads</td></tr>
+      <tr><td>production</td><td>8</td><td>snappy</td><td>2.8M/sec</td><td>standard</td></tr>
+      <tr><td>development</td><td>2</td><td>snappy</td><td>1.4M/sec</td><td>testing</td></tr>
+      <tr><td>compact</td><td>4</td><td>gzip</td><td>0.7M/sec</td><td>archival</td></tr>
+    </table>
+  </div>` },
+
+  { bg:'slide-dark', render:`<div>
+    <div class="tag">Core capabilities</div>
+    <h2>Fast. Lean. Production-verified.</h2>
+  </div>
+  <div>
+    <div class="grid2">
+      <div class="card"><div class="badge b-teal">Partition pruning</div><div style="font-size:12px;opacity:.7;margin-top:4px">Hive-style dirs → 29× faster queries, 89% data skipped</div></div>
+      <div class="card"><div class="badge b-amber">Incremental tracking</div><div style="font-size:12px;opacity:.7;margin-top:4px">JSON registry tracks files → 0.27% re-processing/day</div></div>
+      <div class="card"><div class="badge b-blue">Schema drift handling</div><div style="font-size:12px;opacity:.7;margin-top:4px">Auto-maps tpep_* variations across 2023–2025</div></div>
+      <div class="card"><div class="badge b-coral">Built-in benchmarking</div><div style="font-size:12px;opacity:.7;margin-top:4px">ETLBenchmark measures throughput, saves JSON trends</div></div>
+    </div>
+  </div>` },
+
+  { bg:'slide-teal', render:`<div>
+    <div class="tag">Production engineering</div>
+    <h2>Safety beyond concurrency</h2>
+    <p class="sub">Observability, resilience, and automation built in.</p>
+  </div>
+  <div>
+    <div class="item"><span class="check">✓</span><div><strong>Automatic retry</strong> — exponential backoff 0.5s → 5.0s cap</div></div>
+    <div class="sep"></div>
+    <div class="item"><span class="check">✓</span><div><strong>Crash recovery</strong> — context-manager locks + cleanup_old_locks()</div></div>
+    <div class="sep"></div>
+    <div class="item"><span class="check">✓</span><div><strong>Data validation</strong> — row counts, null distributions, schema checks</div></div>
+    <div class="sep"></div>
+    <div class="item"><span class="check">✓</span><div><strong>Real-time monitoring</strong> — make registry-status shows active locks</div></div>
+  </div>` },
+
+  { bg:'slide-amber', render:`<div>
+    <div class="tag">Scaling pathways</div>
+    <h2>When to evolve</h2>
+    <p class="sub">Registry locking solves 90% of ETL concurrency needs. Clear paths exist for edge cases.</p>
+  </div>
+  <div>
+    <table class="mode-table">
+      <tr><td style="color:#EF9F27">5–20 writers, local/cloud</td><td style="color:#9FE1CB">✓ Registry locking — maintain</td></tr>
+      <tr><td style="color:#EF9F27">50+ writers, multi-region</td><td style="opacity:.8">PostgreSQL advisory locks</td></tr>
+      <tr><td style="color:#EF9F27">Compliance, time-travel</td><td style="opacity:.8">Temporal DB pattern (valid_from/valid_to)</td></tr>
+      <tr><td style="color:#EF9F27">Real-time, sub-second writes</td><td style="opacity:.8">Kafka + append-only staging</td></tr>
+    </table>
+    <div style="font-size:11px;margin-top:14px;opacity:.65;font-style:italic">Start lean. Monitor metrics. Scale deliberately.</div>
+  </div>` },
+
+  { bg:'slide-dark', render:`<div>
+    <div class="tag">Get started</div>
+    <h2>Three commands to <span class="hero-accent">122M rows/sec</span></h2>
+  </div>
+  <div>
+    <div class="code-block">git clone https://github.com/saurshaz/analytics-and-databases
+cd analytics-and-databases
+make etl-fast  # See 122M rows/sec in action</div>
+    <div class="grid3" style="margin-top:12px">
+      <div class="card"><div class="stat-label">Dataset</div><div style="font-size:12px;margin-top:4px">NYC Yellow Taxi<br>2023–2025</div></div>
+      <div class="card"><div class="stat-label">Status</div><div style="font-size:12px;margin-top:4px;color:#5DCAA5">Unified v2.0<br>Production-ready</div></div>
+      <div class="card"><div class="stat-label">Docs & extend</div><div style="font-size:12px;margin-top:4px">docs/ · presets<br>new modes · PRs</div></div>
+    </div>
+  </div>` },
+
+  { bg:'slide-mid', render:`<div>
+    <div class="tag">How it works</div>
+    <h2>Registry locking pattern</h2>
+    <p class="sub">Atomic file-based coordination with automatic retry and cleanup.</p>
+  </div>
+  <div>
+    <div class="code-block" style="font-size:10px">with etl.registry.acquire_lock('run_001', 'worker_1', timeout=300):
+    stats = etl.load_parquet_safe(...)
+    # Only one writer executes here
+    # Lock automatically released on exit</div>
+    <div style="margin-top:12px;display:flex;gap:8px">
+      <div class="card" style="flex:1">
+        <div class="stat-label">When lock is free</div>
+        <div style="font-size:11px;margin-top:4px;opacity:.7">1. Check registry<br>2. Add lock entry<br>3. Execute ETL<br>4. Release lock</div>
+      </div>
+      <div class="card" style="flex:1">
+        <div class="stat-label">When locked</div>
+        <div style="font-size:11px;margin-top:4px;opacity:.7">1. Check registry<br>2. Exponential backoff<br>3. 0.5s → 5.0s cap<br>4. Timeout ~12.5s</div>
+      </div>
+    </div>
+  </div>` },
+
+  { bg:'slide-blue', render:`<div>
+    <div class="tag">Alternatives</div>
+    <h2>When to scale beyond registry</h2>
+    <p class="sub">Three proven patterns for higher concurrency or compliance.</p>
+  </div>
+  <div>
+    <table class="mode-table" style="font-size:11px">
+      <tr><td style="color:#85B7EB;font-weight:500">PostgreSQL</td><td style="opacity:.7">Advisory locks, ACID, multi-region</td><td style="opacity:.5">50+ writers</td></tr>
+      <tr><td style="color:#85B7EB;font-weight:500">Temporal</td><td style="opacity:.7">Time-travel, audit trail, compliance</td><td style="opacity:.5">5–10 writers</td></tr>
+      <tr><td style="color:#85B7EB;font-weight:500">Kafka</td><td style="opacity:.7">Real-time streaming, sub-second</td><td style="opacity:.5">100+ writers</td></tr>
+    </table>
+    <div style="margin-top:12px;font-size:11px;opacity:.6;font-family:'IBM Plex Mono',monospace">Migrate path: Start lean → Scale to PG → Add temporal (if audit needed)</div>
+  </div>` },
+
+  { bg:'slide-mid', render:`<div>
+    <div class="tag">Concurrency model</div>
+    <h2>Safe parallel writes</h2>
+    <p class="sub">Three workers submit simultaneously. Registry ensures sequential execution.</p>
+  </div>
+  <div>
+    <div style="font-size:11px;font-family:'IBM Plex Mono',monospace;line-height:1.9;opacity:.85">
+      <div>Worker 2023: [Acquire] → Load (45s) → [Release] ✓</div>
+      <div style="margin-top:6px">Worker 2024: [Wait] → [Acquire] → Load (45s) → [Release] ✓</div>
+      <div style="margin-top:6px">Worker 2025: [Wait] → [Wait] → [Acquire] → Load (45s) → [Release] ✓</div>
+      <div style="margin-top:10px;border-top:0.5px solid rgba(255,255,255,.1);padding-top:10px;opacity:.6">
+        Total: ~135s (3 × 45s loads + lock overhead)<br>Result: 384M rows loaded safely, zero conflicts
+      </div>
+    </div>
+  </div>` },
+
+  { bg:'slide-teal', render:`<div>
+    <div class="tag">Monitoring</div>
+    <h2>Registry inspection</h2>
+    <p class="sub">Real-time visibility into locks, runs, and audit trails.</p>
+  </div>
+  <div>
+    <div class="code-block" style="color:#9FE1CB;font-size:10px">make registry-status
+
+Active locks: 1
+├── lock_id: load_year_2024_worker_2024
+├── acquired_at: 2026-04-19T10:30:00Z
+└── writer_id: worker_2024
+
+Run history (last 3):
+├── daily_load_20260419: 128M rows · 11s
+├── daily_load_20260418: 128M rows · 12s
+└── daily_load_20260417: 128M rows · 11s</div>
+  </div>` },
+
+  { bg:'slide-dark', render:`<div>
+    <div class="tag">Troubleshooting</div>
+    <h2>Lock timeout? Registry corruption?</h2>
+  </div>
+  <div>
+    <div class="grid2">
+      <div class="card">
+        <div class="badge b-coral">Lock timeout</div>
+        <div style="font-size:11px;opacity:.7;margin-top:4px">1. Check who's holding lock<br>2. Increase timeout<br>3. Clean old locks if crashed</div>
+      </div>
+      <div class="card">
+        <div class="badge b-amber">Registry corruption</div>
+        <div style="font-size:11px;opacity:.7;margin-top:4px">1. Delete .json file<br>2. Recreate on next run<br>3. Automatic recovery</div>
+      </div>
+    </div>
+    <div class="code-block" style="margin-top:10px;font-size:9.5px">etl.cleanup_old_locks(older_than_hours=24)
+etl.get_registry_status()['active_locks']</div>
+  </div>` },
+
+  { bg:'slide-blue', render:`<div>
+    <div class="tag">Best practices</div>
+    <h2>Production patterns</h2>
+  </div>
+  <div>
+    <div class="item"><span class="check">✓</span><div><strong>Descriptive IDs</strong> — 'dag_task_load_taxi_2024' not 'worker_1'</div></div>
+    <div class="sep" style="background:rgba(255,255,255,.1);margin:8px 0"></div>
+    <div class="item"><span class="check">✓</span><div><strong>Right timeout</strong> — small (60s) · normal (300s) · large (1200s)</div></div>
+    <div class="sep" style="background:rgba(255,255,255,.1);margin:8px 0"></div>
+    <div class="item"><span class="check">✓</span><div><strong>Registry cleanup</strong> — archive when &gt;50MB</div></div>
+    <div class="sep" style="background:rgba(255,255,255,.1);margin:8px 0"></div>
+    <div class="item"><span class="check">✓</span><div><strong>Error handling</strong> — timeout != retry, don't interrupt active loads</div></div>
+  </div>` },
+
+  { bg:'slide-amber', render:`<div>
+    <div class="tag">Benchmarking</div>
+    <h2>Measure impact empirically</h2>
+    <p class="sub">Built-in metrics for configuration tuning and capacity planning.</p>
+  </div>
+  <div>
+    <div class="code-block" style="color:#FAC775;font-size:10px">benchmark = ETLBenchmark('nyc_yellow_taxi.duckdb')
+results = benchmark.run_load_benchmark(preset='fast')
+
+Throughput: 5,627,906 rows/sec
+Duration: 7.25s
+Rows: 40,800,000</div>
+    <div style="margin-top:10px">
+      <div style="font-size:11px;opacity:.7">Compare presets: dev (1.4M/s) vs prod (2.8M/s) vs fast (5.6M/s)</div>
+      <div style="font-size:10px;opacity:.5;margin-top:4px;font-family:'IBM Plex Mono',monospace">Save JSON trends for capacity planning</div>
+    </div>
+  </div>` },
+
+  { bg:'slide-mid', render:`<div>
+    <div class="tag">Comparison</div>
+    <h2>Registry vs alternatives</h2>
+  </div>
+  <div>
+    <table class="mode-table" style="font-size:10px">
+      <thead><tr><td style="opacity:.4">aspect</td><td style="opacity:.4">registry</td><td style="opacity:.4">postgres</td><td style="opacity:.4">temporal</td></tr></thead>
+      <tr><td style="opacity:.7">setup</td><td style="color:#5DCAA5">1 JSON file</td><td>PG + network</td><td>SQL tables</td></tr>
+      <tr><td style="opacity:.7">lock latency</td><td style="color:#5DCAA5">&lt;1ms</td><td>5-10ms</td><td>1-5ms</td></tr>
+      <tr><td style="opacity:.7">max writers</td><td style="color:#5DCAA5">10-20</td><td>100+</td><td>5-10</td></tr>
+      <tr><td style="opacity:.7">audit trail</td><td>basic</td><td style="color:#85B7EB">full</td><td style="color:#85B7EB">complete</td></tr>
+      <tr><td style="opacity:.7">external deps</td><td style="color:#5DCAA5">zero</td><td>postgres</td><td>zero</td></tr>
+    </table>
+  </div>` }
+];
+
+const bgMap = {
+  'slide-dark':'#0e1117','slide-teal':'#04342C','slide-amber':'#412402',
+  'slide-blue':'#042C53','slide-mid':'#17191f'
+};
+const textMap = {
+  'slide-dark':'#e8eaf0','slide-teal':'#9FE1CB','slide-amber':'#FAC775',
+  'slide-blue':'#B5D4F4','slide-mid':'#e8eaf0'
+};
+
+let cur = 0, animating = false;
+const stage = document.getElementById('stage');
+const dotsEl = document.getElementById('dots');
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+const overlay = document.getElementById('pdf-overlay');
+const overlayText = document.getElementById('overlay-text');
+const overlaySub = document.getElementById('overlay-sub');
+const renderArea = document.getElementById('pdf-render-area');
+
+function build(){
+  stage.innerHTML = '';
+  dotsEl.innerHTML = '';
+  slides.forEach((s,i)=>{
+    const el = document.createElement('div');
+    el.className = 'slide ' + s.bg + (i===0?' active':'');
+    el.id = 'slide'+i;
+    el.innerHTML = '<div class="progress-bar"><div class="progress-fill" style="width:'+((i+1)/slides.length*100).toFixed(1)+'%"></div></div>' + s.render;
+    stage.appendChild(el);
+    const d = document.createElement('button');
+    d.className = 'dot'+(i===0?' on':'');
+    d.onclick = ()=>goTo(i);
+    d.setAttribute('aria-label','Go to slide '+(i+1));
+    dotsEl.appendChild(d);
+  });
+}
+
+function goTo(n){
+  if(animating||n===cur) return;
+  animating = true;
+  const from = document.getElementById('slide'+cur);
+  const to = document.getElementById('slide'+n);
+  const dir = n > cur ? 1 : -1;
+  to.style.transform = 'translateX('+(dir*60)+'px)';
+  to.style.opacity = '0';
+  to.style.pointerEvents = 'none';
+  from.classList.remove('active');
+  from.classList.add('exit');
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      to.classList.add('active');
+      to.style.transform = '';
+      to.style.opacity = '';
+      to.style.pointerEvents = '';
+    });
+  });
+  from.addEventListener('transitionend', ()=>{
+    from.classList.remove('exit');
+    animating = false;
+  }, {once:true});
+  document.querySelectorAll('.dot').forEach((d,i)=>d.className='dot'+(i===n?' on':''));
+  cur = n;
+  prevBtn.disabled = cur===0;
+  nextBtn.disabled = cur===slides.length-1;
+}
+
+function move(d){ goTo(Math.max(0,Math.min(slides.length-1,cur+d))); }
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ') move(1);
+  if(e.key==='ArrowLeft') move(-1);
+});
+
+function buildPDFPages(){
+  renderArea.innerHTML = '';
+  slides.forEach((s,i)=>{
+    const page = document.createElement('div');
+    page.className = 'pdf-slide-page';
+    page.style.background = bgMap[s.bg]||'#0e1117';
+    page.style.color = textMap[s.bg]||'#e8eaf0';
+    page.innerHTML = '<div style="position:absolute;right:24px;top:18px;font-size:10px;opacity:.35;font-family:IBM Plex Mono,monospace">'+(i+1)+' / '+slides.length+'</div>' + s.render;
+    renderArea.appendChild(page);
+  });
+}
+
+async function exportPDF(){
+  overlay.classList.add('visible');
+  overlayText.textContent = 'Generating PDF…';
+  overlaySub.textContent = 'Preparing '+slides.length+' slides';
+  try{
+    buildPDFPages();
+    await new Promise(r=>setTimeout(r,600));
+    const pages = renderArea.querySelectorAll('.pdf-slide-page');
+    const elements = [];
+    pages.forEach(p=>elements.push(p));
+    const opt = {
+      margin:[6,6,6,6],
+      filename:'analytics-and-databases-deck.pdf',
+      image:{type:'jpeg',quality:0.98},
+      html2canvas:{scale:2,useCORS:true,backgroundColor:'#0a0c10',logging:false},
+      jsPDF:{unit:'mm',format:'a4',orientation:'landscape'},
+      pagebreak:{mode:['css','legacy'],before:'.pdf-slide-page'}
+    };
+    await html2pdf().set(opt).from(renderArea).save();
+    overlayText.textContent = 'PDF downloaded!';
+    overlaySub.textContent = 'analytics-and-databases-deck.pdf';
+  } catch(err){
+    overlayText.textContent = 'Export failed';
+    overlaySub.textContent = err.message || 'Unknown error';
+    console.error(err);
+  }
+  setTimeout(()=>overlay.classList.remove('visible'),1800);
+}
+
+build();
+prevBtn.disabled = true;
+</script>
+</body>
+</html>
+

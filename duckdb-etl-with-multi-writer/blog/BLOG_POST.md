@@ -265,6 +265,207 @@ When Process A wants to write:
 3. Execute ETL work
 4. Remove lock on completion
 
+## Alternative Approaches: When Registry Locking Isn't Enough
+
+While registry locking is simple and effective for most scenarios, there are situations where alternative approaches provide better concurrency control:
+
+### When You Need Alternatives
+
+**Scenarios requiring more sophisticated concurrency:**
+
+1. **High-contention environments** (50+ concurrent writers)
+   - Registry file I/O becomes bottleneck
+   - Lock timeouts increase with writer count
+   - Throughput plateaus or degrades
+
+2. **Complex ACID guarantees**
+   - Distributed transaction support across DuckDB instances
+   - Need for rollback mechanisms at orchestration level
+   - Saga patterns or event sourcing requirements
+
+3. **Network-distributed pipelines**
+   - Multiple geographic regions writing to central data lake
+   - Latency-sensitive lock acquisition
+   - Cross-region consistency requirements
+
+4. **Real-time streaming ingestion**
+   - Sub-second write latency requirements
+   - Continuous append rather than batch loading
+   - Event replay and deduplication needs
+
+### Alternative 1: PostgreSQL-Backed Coordination
+
+Use PostgreSQL as central coordinator for lock management and metadata:
+
+```python
+import psycopg2
+from contextlib import contextmanager
+
+class PostgreSQLLockManager:
+    """PostgreSQL-based distributed lock coordination"""
+    
+    def __init__(self, conn_string: str):
+        self.conn_string = conn_string
+    
+    @contextmanager
+    def acquire_distributed_lock(self, lock_id: str, timeout: int = 300):
+        """
+        Acquire advisory lock in PostgreSQL
+        PostgreSQL handles lock fairness, deadlock detection, automatic cleanup
+        """
+        conn = psycopg2.connect(self.conn_string)
+        try:
+            cur = conn.cursor()
+            # Use PostgreSQL's advisory locks (>1M possible locks, no storage overhead)
+            lock_num = hash(lock_id) % (2**31 - 1)
+            cur.execute(f"SELECT pg_advisory_lock({lock_num})")
+            print(f"✅ PG Lock acquired: {lock_id}")
+            yield
+        finally:
+            cur.execute(f"SELECT pg_advisory_unlock({lock_num})")
+            conn.close()
+
+# Usage
+pg_lock = PostgreSQLLockManager('postgresql://user:pass@localhost/locks_db')
+
+with pg_lock.acquire_distributed_lock('taxi_etl_2024'):
+    # Write to DuckDB only when lock is held
+    etl.load_parquet_safe(...)
+```
+
+**Advantages:**
+- ✅ Database-native ACID semantics
+- ✅ Fair lock queuing (FIFO)
+- ✅ Automatic deadlock detection and resolution
+- ✅ Works across network/regions
+- ✅ Built-in monitoring and diagnostics
+
+**Trade-offs:**
+- ❌ Requires external PostgreSQL instance (operational complexity)
+- ❌ Network latency in lock operations (~5-10ms per lock/unlock)
+- ❌ Potential single point of failure (though mitigated with replication)
+
+**Best for:** Multi-region pipelines, 10-50 concurrent writers, strong consistency requirements
+
+### Alternative 2: Temporal Database Pattern (Time-Travel Tables)
+
+Use DuckDB's temporal capabilities with append-only staging tables:
+
+```python
+import duckdb
+from datetime import datetime, timezone
+
+class TemporalETL:
+    """Time-travel based multi-writer coordination"""
+    
+    def __init__(self, db_path: str):
+        self.con = duckdb.connect(db_path)
+    
+    def load_with_temporal_staging(self, year: int, writer_id: str):
+        """
+        Load into temporal staging table, then merge into main table
+        Each writer gets isolated staging table, merges are serialized
+        """
+        timestamp = datetime.now(timezone.utc).isoformat()
+        staging_table = f"yellow_taxi_trips_staging_{writer_id}_{timestamp.replace(':', '_')}"
+        
+        # Writer A: Load into isolated staging table (no conflicts)
+        self.con.execute(f"""
+            CREATE TABLE {staging_table} AS
+            SELECT 
+                *,
+                '{timestamp}'::TIMESTAMP AS valid_from,
+                NULL::TIMESTAMP AS valid_to,
+                '{writer_id}'::VARCHAR AS writer_id
+            FROM read_parquet('NYC Yellow Taxi Record 23-24-25/{year}/*.parquet')
+        """)
+        
+        # Merge into main table (single-threaded for consistency)
+        self.con.execute(f"""
+            BEGIN TRANSACTION;
+            
+            -- Archive previous records by setting valid_to
+            UPDATE yellow_taxi_trips_temporal
+            SET valid_to = '{timestamp}'::TIMESTAMP
+            WHERE valid_to IS NULL;
+            
+            -- Insert new records with open valid_to interval
+            INSERT INTO yellow_taxi_trips_temporal
+            SELECT * FROM {staging_table};
+            
+            COMMIT;
+        """)
+        
+        # Clean up staging table
+        self.con.execute(f"DROP TABLE {staging_table}")
+
+# Usage
+temporal_etl = TemporalETL('nyc_yellow_taxi.duckdb')
+
+# Writer A loads 2023
+temporal_etl.load_with_temporal_staging(2023, 'worker_a')
+# Writer B loads 2024  
+temporal_etl.load_with_temporal_staging(2024, 'worker_b')
+# Writer C loads 2025
+temporal_etl.load_with_temporal_staging(2025, 'worker_c')
+
+# Query historical data
+results = con.execute("""
+    SELECT trip_id, fare, valid_from, valid_to, writer_id
+    FROM yellow_taxi_trips_temporal
+    WHERE valid_to IS NULL  -- Current version
+    LIMIT 10
+""").fetchall()
+```
+
+**Advantages:**
+- ✅ Full audit trail (who loaded what, when)
+- ✅ Time-travel queries (query data as of any point in time)
+- ✅ Handles writer failures gracefully (incomplete loads recoverable)
+- ✅ No external dependencies (pure DuckDB)
+- ✅ Good for analytics/compliance scenarios
+
+**Trade-offs:**
+- ❌ Increased storage (versions accumulate)
+- ❌ More complex query logic
+- ❌ Still requires merge serialization (no true parallelism)
+- ❌ Harder to implement incremental loading
+
+**Best for:** Compliance/audit requirements, time-travel queries, data lineage tracking
+
+### Comparison Matrix
+
+| Aspect | Registry Locking | PostgreSQL | Temporal Pattern |
+|--------|-----------------|------------|------------------|
+| Setup Complexity | Low (JSON file) | Medium (DB + network) | Low (SQL tables) |
+| Latency per lock | <1ms | 5-10ms | 1-5ms (merge) |
+| Max Writers | 10-20 | 100+ | 5-10 (merge bottleneck) |
+| Consistency Model | Eventual (sequential) | Strong (ACID) | Event-sourced (temporal) |
+| Audit Trail | Basic run log | Full transaction log | Complete time-travel |
+| External Services | None | PostgreSQL | None |
+| Failure Recovery | Manual cleanup | Automatic | Automatic (replay) |
+| Query Overhead | 0% (standard tables) | 0% (standard tables) | 10-20% (versioning) |
+| Best For | Simple batch ETL | Multi-region pipelines | Compliance/analytics |
+
+### Migration Path
+
+If your registry locking pipeline is hitting limits:
+
+```
+1. Start with Registry Locking
+   └─ 10+ concurrent writers, 100M+ rows/sec, <1% overhead
+   
+2. Scale to PostgreSQL-backed (when hitting 20-50 writers)
+   └─ Migrate lock manager to use PG advisory locks
+   └─ Keep DuckDB for analytics (no schema change)
+   └─ Add replication for HA
+   
+3. Add Temporal Pattern (when audit trail needed)
+   └─ Create temporal versions of main tables
+   └─ Archive current data with valid_from/valid_to
+   └─ Enable historical queries and compliance reporting
+```
+
 ## How It Works
 
 ### Basic Lock Pattern
