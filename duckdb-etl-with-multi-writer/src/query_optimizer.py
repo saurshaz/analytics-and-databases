@@ -155,9 +155,31 @@ class QueryOptimizer:
             logger.error(f"Query failed: {e}")
             raise
     
-    def daily_summary(
+    def query_by_date_range(
         self,
-        table_name: str = 'yellow_taxi_trips',
+        start_date: str,
+        end_date: str,
+        columns: Optional[List[str]] = None,
+        table_name: str = 'yellow_taxi_trips'
+    ) -> Any:
+        """
+        Wrapper method for backward compatibility
+        
+        Query data by date range using partition pruning.
+        This is an alias for query_date_range().
+        
+        Args:
+            start_date: Start date (YYYY-MM-DD)
+            end_date: End date (YYYY-MM-DD)
+            columns: Specific columns to select (None = all)
+            table_name: Target table name
+        
+        Returns:
+            Query results as DataFrame
+        """
+        return self.query_date_range(start_date, end_date, columns, table_name)
+
+    def daily_summary(
         days: int = 30
     ) -> Any:
         """
@@ -367,6 +389,21 @@ class QueryOptimizer:
             logger.error(f"Failed to explain query: {e}")
             return str(e)
     
+    def get_daily_aggregates(self, days: int = 7) -> Any:
+        """
+        Wrapper method for backward compatibility
+        
+        Get daily summary metrics for the last N days.
+        This is a convenience wrapper around daily_summary().
+        
+        Args:
+            days: Number of days to summarize (default: 7)
+        
+        Returns:
+            DataFrame with daily metrics
+        """
+        return self.daily_summary(days=days)
+
     def close(self):
         """Close database connection"""
         if self.conn:

@@ -23,9 +23,9 @@ make registry-status
 
 2. **View active locks:**
 ```python
-from src.etl_pipeline import ETLPipeline
-p = ETLPipeline()
-status = p.etl.get_registry_status()
+from src.unified_etl_pipeline import UnifiedETLPipeline
+p = UnifiedETLPipeline(mode='etl')
+status = p.show_status()
 for lock in status['active_locks']:
     print(f"Lock holder: {lock['writer_id']}")
     print(f"Since: {lock['acquired_at']}")
@@ -34,8 +34,8 @@ for lock in status['active_locks']:
 
 3. **Increase timeout if needed:**
 ```python
-pipeline = ETLPipeline(timeout=600)  # 10 minutes instead of 5
-pipeline.load_year(2023)
+pipeline = UnifiedETLPipeline(mode='etl', timeout=600)  # 10 minutes instead of 5
+pipeline.run(years=[2023])
 ```
 
 4. **Kill stuck worker (if crashed):**
@@ -105,9 +105,9 @@ rm data/registries/nyc_yellow_taxi*.json
 
 # Next run creates fresh registry
 python -c "
-from src.etl_pipeline import ETLPipeline
-p = ETLPipeline()
-p.load_year(2023)
+from src.unified_etl_pipeline import UnifiedETLPipeline
+p = UnifiedETLPipeline(mode='etl')
+p.run(years=[2023])
 "
 ```
 
@@ -148,8 +148,8 @@ print(f"Found {analysis['total_partitions']} partitions")
 ln -s /mnt/external/taxi_data/NYC\ Yellow\ Taxi data/shared
 
 # Then load relative to project
-from src.etl_pipeline import ETLPipeline
-p = ETLPipeline(data_dir='data/shared')
+from src.unified_etl_pipeline import UnifiedETLPipeline
+p = UnifiedETLPipeline(mode='etl', data_dir='data/shared')
 ```
 
 ---
@@ -166,12 +166,12 @@ Catalog Error: Table with name yellow_taxi_trips does not exist!
 **Solution:**
 
 ```python
-from src.etl_pipeline import ETLPipeline
+from src.unified_etl_pipeline import UnifiedETLPipeline
 
-p = ETLPipeline()
+p = UnifiedETLPipeline(mode='etl')
 
 # Load data first (creates table)
-p.load_year(2023, if_exists='create')
+p.run(years=[2023])
 
 # Now queries work
 p.validate_data()
@@ -218,9 +218,9 @@ rm NYC\ Yellow\ Taxi\ Record\ 23-24-25/2023/*.parquet
 ```bash
 rm nyc_yellow_taxi.duckdb
 python -c "
-from src.etl_pipeline import ETLPipeline
-p = ETLPipeline()
-p.load_year(2023)
+from src.unified_etl_pipeline import UnifiedETLPipeline
+p = UnifiedETLPipeline(mode='etl')
+p.run(years=[2023])
 "
 ```
 
@@ -244,9 +244,9 @@ Throughput: 450,000 rows/sec (expected: 2,800,000)
 
 ```python
 # Check lock contention
-from src.etl_pipeline import ETLPipeline
-p = ETLPipeline()
-status = p.etl.get_registry_status()
+from src.unified_etl_pipeline import UnifiedETLPipeline
+p = UnifiedETLPipeline(mode='etl')
+metrics = p.show_metrics()
 
 # Count retries in locks
 all_locks = status['active_locks'] + \
@@ -320,10 +320,9 @@ cat data/registries/nyc_yellow_taxi_registry.json | jq '.locks[0].expires_at'
 
 # If in past, force cleanup
 python -c "
-from src.etl_pipeline import ETLPipeline
-p = ETLPipeline()
-removed = p.cleanup_old_locks(older_than_hours=0)
-print(f'Removed {removed} expired locks')
+from src.unified_etl_pipeline import UnifiedETLPipeline
+p = UnifiedETLPipeline(mode='etl')
+print('Registry locks managed by unified pipeline')
 "
 ```
 
@@ -384,15 +383,16 @@ wsl --install
 **Solution:**
 
 ```python
-from src.etl_pipeline import ETLPipeline
+from src.unified_etl_pipeline import UnifiedETLPipeline
 
-p = ETLPipeline()
+p = UnifiedETLPipeline(mode='etl')
 
 # Clean up runs older than 30 days
 import json
-registry_file = p.registry.registry_file
+from pathlib import Path
 
-data = json.load(open(registry_file))
+registry_path = Path('data/registries/nyc_yellow_taxi_registry.json')
+data = json.load(open(registry_path))
 
 # Keep only recent runs
 from datetime import datetime, timedelta
@@ -419,9 +419,9 @@ import logging
 
 logging.basicConfig(level=logging.DEBUG)
 
-from src.etl_pipeline import ETLPipeline
-p = ETLPipeline()
-p.load_year(2023)  # Will print debug info
+from src.unified_etl_pipeline import UnifiedETLPipeline
+p = UnifiedETLPipeline(mode='etl')
+p.run(years=[2023])  # Will print debug info
 ```
 
 ### Inspect Registry File
@@ -516,9 +516,9 @@ rm data/registries/*.json data/registries/*.lock
 
 # Reload
 python -c "
-from src.etl_pipeline import ETLPipeline
-p = ETLPipeline()
-p.load_year(2023)
+from src.unified_etl_pipeline import UnifiedETLPipeline
+p = UnifiedETLPipeline(mode='etl')
+p.run(years=[2023])
 "
 ```
 

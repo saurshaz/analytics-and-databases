@@ -159,6 +159,10 @@ class ETLConfig:
         return benchmarks.get(preset_name, {})
 
 
+# Export PRESETS at module level for easier access
+PRESETS = ETLConfig.PRESETS
+
+
 def main():
     """Main entry point"""
     logger.info("")
@@ -205,17 +209,18 @@ def main():
         
         # Import and run the ETL
         try:
-            from src.etl_pipeline import ETLPipeline
+            from src.unified_etl_pipeline import UnifiedETLPipeline
             import asyncio
             
-            pipeline = ETLPipeline(
+            pipeline = UnifiedETLPipeline(
+                mode='etl',
                 db_path=config.get('db_path', 'nyc_yellow_taxi.duckdb'),
                 data_dir=config.get('raw_dir'),
                 pipeline_id=f'taxi_etl_{preset_name}'
             )
             
             # Load data
-            stats = pipeline.load_all_years()
+            result = pipeline.run(years=[2023, 2024, 2025])
             
             logger.info("=" * 80)
             logger.info("✅ ETL completed successfully")

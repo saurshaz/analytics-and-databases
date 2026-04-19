@@ -1,0 +1,687 @@
+{
+  "last_updated": "2026-04-19T08:38:48.249417+00:00",
+  "total_files": 72,
+  "total_rows": 256405096,
+  "loaded_dates": [
+    {
+      "date": "2023-01-01",
+      "source_file": "yellow_tripdata_2023-01.parquet",
+      "rows": 3066766,
+      "null_count": 358715,
+      "processed_at": "2026-04-19T08:26:22.200699+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2023-02-01",
+      "source_file": "yellow_tripdata_2023-02.parquet",
+      "rows": 2913955,
+      "null_count": 384085,
+      "processed_at": "2026-04-19T08:26:24.034640+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2023-03-01",
+      "source_file": "yellow_tripdata_2023-03.parquet",
+      "rows": 3403766,
+      "null_count": 438095,
+      "processed_at": "2026-04-19T08:26:26.083169+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2023-04-01",
+      "source_file": "yellow_tripdata_2023-04.parquet",
+      "rows": 3288250,
+      "null_count": 453450,
+      "processed_at": "2026-04-19T08:26:28.213570+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2023-05-01",
+      "source_file": "yellow_tripdata_2023-05.parquet",
+      "rows": 3513649,
+      "null_count": 508980,
+      "processed_at": "2026-04-19T08:26:30.291956+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2023-06-01",
+      "source_file": "yellow_tripdata_2023-06.parquet",
+      "rows": 3307234,
+      "null_count": 499435,
+      "processed_at": "2026-04-19T08:26:33.173750+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2023-07-01",
+      "source_file": "yellow_tripdata_2023-07.parquet",
+      "rows": 2907108,
+      "null_count": 425430,
+      "processed_at": "2026-04-19T08:26:35.427445+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2023-08-01",
+      "source_file": "yellow_tripdata_2023-08.parquet",
+      "rows": 2824209,
+      "null_count": 439430,
+      "processed_at": "2026-04-19T08:26:37.768657+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2023-09-01",
+      "source_file": "yellow_tripdata_2023-09.parquet",
+      "rows": 2846722,
+      "null_count": 701125,
+      "processed_at": "2026-04-19T08:26:39.923486+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2023-10-01",
+      "source_file": "yellow_tripdata_2023-10.parquet",
+      "rows": 3522285,
+      "null_count": 774645,
+      "processed_at": "2026-04-19T08:26:42.828557+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2023-11-01",
+      "source_file": "yellow_tripdata_2023-11.parquet",
+      "rows": 3339715,
+      "null_count": 663375,
+      "processed_at": "2026-04-19T08:26:46.548078+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2023-12-01",
+      "source_file": "yellow_tripdata_2023-12.parquet",
+      "rows": 3376567,
+      "null_count": 900015,
+      "processed_at": "2026-04-19T08:26:49.760001+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2024-01-01",
+      "source_file": "yellow_tripdata_2024-01.parquet",
+      "rows": 2964624,
+      "null_count": 700810,
+      "processed_at": "2026-04-19T08:26:51.972691+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2024-02-01",
+      "source_file": "yellow_tripdata_2024-02.parquet",
+      "rows": 3007526,
+      "null_count": 928050,
+      "processed_at": "2026-04-19T08:26:54.677060+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2024-03-01",
+      "source_file": "yellow_tripdata_2024-03.parquet",
+      "rows": 3582628,
+      "null_count": 2130950,
+      "processed_at": "2026-04-19T08:26:57.213098+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2024-04-01",
+      "source_file": "yellow_tripdata_2024-04.parquet",
+      "rows": 3514289,
+      "null_count": 2042880,
+      "processed_at": "2026-04-19T08:26:59.245281+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2024-05-01",
+      "source_file": "yellow_tripdata_2024-05.parquet",
+      "rows": 3723833,
+      "null_count": 2023330,
+      "processed_at": "2026-04-19T08:27:01.309601+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2024-06-01",
+      "source_file": "yellow_tripdata_2024-06.parquet",
+      "rows": 3539193,
+      "null_count": 2053905,
+      "processed_at": "2026-04-19T08:27:03.308217+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2024-07-01",
+      "source_file": "yellow_tripdata_2024-07.parquet",
+      "rows": 3076903,
+      "null_count": 1394945,
+      "processed_at": "2026-04-19T08:27:04.954205+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2024-08-01",
+      "source_file": "yellow_tripdata_2024-08.parquet",
+      "rows": 2979183,
+      "null_count": 1293335,
+      "processed_at": "2026-04-19T08:27:06.562693+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2024-09-01",
+      "source_file": "yellow_tripdata_2024-09.parquet",
+      "rows": 3633030,
+      "null_count": 2418655,
+      "processed_at": "2026-04-19T08:27:08.555759+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2024-10-01",
+      "source_file": "yellow_tripdata_2024-10.parquet",
+      "rows": 3833771,
+      "null_count": 1969475,
+      "processed_at": "2026-04-19T08:27:10.663004+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2024-11-01",
+      "source_file": "yellow_tripdata_2024-11.parquet",
+      "rows": 3646369,
+      "null_count": 1868370,
+      "processed_at": "2026-04-19T08:27:12.603634+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2024-12-01",
+      "source_file": "yellow_tripdata_2024-12.parquet",
+      "rows": 3668371,
+      "null_count": 1631455,
+      "processed_at": "2026-04-19T08:27:14.526155+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2025-01-01",
+      "source_file": "yellow_tripdata_2025-01.parquet",
+      "rows": 3475226,
+      "null_count": 2700745,
+      "processed_at": "2026-04-19T08:27:16.499964+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2025-02-01",
+      "source_file": "yellow_tripdata_2025-02.parquet",
+      "rows": 3577543,
+      "null_count": 4034685,
+      "processed_at": "2026-04-19T08:27:18.580822+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2025-03-01",
+      "source_file": "yellow_tripdata_2025-03.parquet",
+      "rows": 4145257,
+      "null_count": 4583315,
+      "processed_at": "2026-04-19T08:27:21.103168+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2025-04-01",
+      "source_file": "yellow_tripdata_2025-04.parquet",
+      "rows": 3970553,
+      "null_count": 3728650,
+      "processed_at": "2026-04-19T08:27:23.331543+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2025-05-01",
+      "source_file": "yellow_tripdata_2025-05.parquet",
+      "rows": 4591845,
+      "null_count": 5980880,
+      "processed_at": "2026-04-19T08:27:26.360204+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2025-06-01",
+      "source_file": "yellow_tripdata_2025-06.parquet",
+      "rows": 4322960,
+      "null_count": 6064730,
+      "processed_at": "2026-04-19T08:27:29.096860+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2025-07-01",
+      "source_file": "yellow_tripdata_2025-07.parquet",
+      "rows": 3898963,
+      "null_count": 5193775,
+      "processed_at": "2026-04-19T08:27:31.258783+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2025-08-01",
+      "source_file": "yellow_tripdata_2025-08.parquet",
+      "rows": 3574091,
+      "null_count": 4431170,
+      "processed_at": "2026-04-19T08:27:33.240970+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2025-09-01",
+      "source_file": "yellow_tripdata_2025-09.parquet",
+      "rows": 4251015,
+      "null_count": 5335975,
+      "processed_at": "2026-04-19T08:27:35.831080+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2025-10-01",
+      "source_file": "yellow_tripdata_2025-10.parquet",
+      "rows": 4428699,
+      "null_count": 4954435,
+      "processed_at": "2026-04-19T08:27:38.571036+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2025-11-01",
+      "source_file": "yellow_tripdata_2025-11.parquet",
+      "rows": 4181444,
+      "null_count": 5073700,
+      "processed_at": "2026-04-19T08:27:40.940924+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2025-12-01",
+      "source_file": "yellow_tripdata_2025-12.parquet",
+      "rows": 4305006,
+      "null_count": 5977410,
+      "processed_at": "2026-04-19T08:27:43.658916+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2023-01-01",
+      "source_file": "yellow_tripdata_2023-01.parquet",
+      "rows": 3066766,
+      "null_count": 358715,
+      "processed_at": "2026-04-19T08:37:36.461834+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2023-02-01",
+      "source_file": "yellow_tripdata_2023-02.parquet",
+      "rows": 2913955,
+      "null_count": 384085,
+      "processed_at": "2026-04-19T08:37:38.166325+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2023-03-01",
+      "source_file": "yellow_tripdata_2023-03.parquet",
+      "rows": 3403766,
+      "null_count": 438095,
+      "processed_at": "2026-04-19T08:37:40.049588+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2023-04-01",
+      "source_file": "yellow_tripdata_2023-04.parquet",
+      "rows": 3288250,
+      "null_count": 453450,
+      "processed_at": "2026-04-19T08:37:41.877714+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2023-05-01",
+      "source_file": "yellow_tripdata_2023-05.parquet",
+      "rows": 3513649,
+      "null_count": 508980,
+      "processed_at": "2026-04-19T08:37:43.802596+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2023-06-01",
+      "source_file": "yellow_tripdata_2023-06.parquet",
+      "rows": 3307234,
+      "null_count": 499435,
+      "processed_at": "2026-04-19T08:37:45.618633+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2023-07-01",
+      "source_file": "yellow_tripdata_2023-07.parquet",
+      "rows": 2907108,
+      "null_count": 425430,
+      "processed_at": "2026-04-19T08:37:47.250230+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2023-08-01",
+      "source_file": "yellow_tripdata_2023-08.parquet",
+      "rows": 2824209,
+      "null_count": 439430,
+      "processed_at": "2026-04-19T08:37:48.817016+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2023-09-01",
+      "source_file": "yellow_tripdata_2023-09.parquet",
+      "rows": 2846722,
+      "null_count": 701125,
+      "processed_at": "2026-04-19T08:37:50.427399+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2023-10-01",
+      "source_file": "yellow_tripdata_2023-10.parquet",
+      "rows": 3522285,
+      "null_count": 774645,
+      "processed_at": "2026-04-19T08:37:52.399266+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2023-11-01",
+      "source_file": "yellow_tripdata_2023-11.parquet",
+      "rows": 3339715,
+      "null_count": 663375,
+      "processed_at": "2026-04-19T08:37:54.228785+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2023-12-01",
+      "source_file": "yellow_tripdata_2023-12.parquet",
+      "rows": 3376567,
+      "null_count": 900015,
+      "processed_at": "2026-04-19T08:37:56.100036+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2024-01-01",
+      "source_file": "yellow_tripdata_2024-01.parquet",
+      "rows": 2964624,
+      "null_count": 700810,
+      "processed_at": "2026-04-19T08:37:57.839079+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2024-02-01",
+      "source_file": "yellow_tripdata_2024-02.parquet",
+      "rows": 3007526,
+      "null_count": 928050,
+      "processed_at": "2026-04-19T08:37:59.536639+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2024-03-01",
+      "source_file": "yellow_tripdata_2024-03.parquet",
+      "rows": 3582628,
+      "null_count": 2130950,
+      "processed_at": "2026-04-19T08:38:01.443576+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2024-04-01",
+      "source_file": "yellow_tripdata_2024-04.parquet",
+      "rows": 3514289,
+      "null_count": 2042880,
+      "processed_at": "2026-04-19T08:38:03.339427+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2024-05-01",
+      "source_file": "yellow_tripdata_2024-05.parquet",
+      "rows": 3723833,
+      "null_count": 2023330,
+      "processed_at": "2026-04-19T08:38:05.310828+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2024-06-01",
+      "source_file": "yellow_tripdata_2024-06.parquet",
+      "rows": 3539193,
+      "null_count": 2053905,
+      "processed_at": "2026-04-19T08:38:07.207805+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2024-07-01",
+      "source_file": "yellow_tripdata_2024-07.parquet",
+      "rows": 3076903,
+      "null_count": 1394945,
+      "processed_at": "2026-04-19T08:38:08.872218+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2024-08-01",
+      "source_file": "yellow_tripdata_2024-08.parquet",
+      "rows": 2979183,
+      "null_count": 1293335,
+      "processed_at": "2026-04-19T08:38:10.521173+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2024-09-01",
+      "source_file": "yellow_tripdata_2024-09.parquet",
+      "rows": 3633030,
+      "null_count": 2418655,
+      "processed_at": "2026-04-19T08:38:12.440521+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2024-10-01",
+      "source_file": "yellow_tripdata_2024-10.parquet",
+      "rows": 3833771,
+      "null_count": 1969475,
+      "processed_at": "2026-04-19T08:38:14.579758+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2024-11-01",
+      "source_file": "yellow_tripdata_2024-11.parquet",
+      "rows": 3646369,
+      "null_count": 1868370,
+      "processed_at": "2026-04-19T08:38:16.475559+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2024-12-01",
+      "source_file": "yellow_tripdata_2024-12.parquet",
+      "rows": 3668371,
+      "null_count": 1631455,
+      "processed_at": "2026-04-19T08:38:18.441711+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2025-01-01",
+      "source_file": "yellow_tripdata_2025-01.parquet",
+      "rows": 3475226,
+      "null_count": 2700745,
+      "processed_at": "2026-04-19T08:38:20.585501+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2025-02-01",
+      "source_file": "yellow_tripdata_2025-02.parquet",
+      "rows": 3577543,
+      "null_count": 4034685,
+      "processed_at": "2026-04-19T08:38:22.703848+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2025-03-01",
+      "source_file": "yellow_tripdata_2025-03.parquet",
+      "rows": 4145257,
+      "null_count": 4583315,
+      "processed_at": "2026-04-19T08:38:25.185748+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2025-04-01",
+      "source_file": "yellow_tripdata_2025-04.parquet",
+      "rows": 3970553,
+      "null_count": 3728650,
+      "processed_at": "2026-04-19T08:38:27.605405+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2025-05-01",
+      "source_file": "yellow_tripdata_2025-05.parquet",
+      "rows": 4591845,
+      "null_count": 5980880,
+      "processed_at": "2026-04-19T08:38:30.686894+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2025-06-01",
+      "source_file": "yellow_tripdata_2025-06.parquet",
+      "rows": 4322960,
+      "null_count": 6064730,
+      "processed_at": "2026-04-19T08:38:33.514325+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2025-07-01",
+      "source_file": "yellow_tripdata_2025-07.parquet",
+      "rows": 3898963,
+      "null_count": 5193775,
+      "processed_at": "2026-04-19T08:38:35.775077+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2025-08-01",
+      "source_file": "yellow_tripdata_2025-08.parquet",
+      "rows": 3574091,
+      "null_count": 4431170,
+      "processed_at": "2026-04-19T08:38:37.852961+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2025-09-01",
+      "source_file": "yellow_tripdata_2025-09.parquet",
+      "rows": 4251015,
+      "null_count": 5335975,
+      "processed_at": "2026-04-19T08:38:40.504316+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2025-10-01",
+      "source_file": "yellow_tripdata_2025-10.parquet",
+      "rows": 4428699,
+      "null_count": 4954435,
+      "processed_at": "2026-04-19T08:38:43.260734+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2025-11-01",
+      "source_file": "yellow_tripdata_2025-11.parquet",
+      "rows": 4181444,
+      "null_count": 5073700,
+      "processed_at": "2026-04-19T08:38:45.558093+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    },
+    {
+      "date": "2025-12-01",
+      "source_file": "yellow_tripdata_2025-12.parquet",
+      "rows": 4305006,
+      "null_count": 5977410,
+      "processed_at": "2026-04-19T08:38:48.249381+00:00",
+      "compression_ratio": 0.42,
+      "status": "success"
+    }
+  ],
+  "errors": [
+    {
+      "file": "../NYC Yellow Taxi Record 23-24-25/2023/yellow_tripdata_2023-01.parquet",
+      "error": "`Import pyarrow` failed. pyarrow is required for parquet support. Use pip or conda to install the pyarrow package.",
+      "timestamp": "2026-04-19T08:25:56.853040+00:00"
+    },
+    {
+      "file": "../NYC Yellow Taxi Record 23-24-25/2023/yellow_tripdata_2023-02.parquet",
+      "error": "`Import pyarrow` failed. pyarrow is required for parquet support. Use pip or conda to install the pyarrow package.",
+      "timestamp": "2026-04-19T08:25:58.160646+00:00"
+    },
+    {
+      "file": "../NYC Yellow Taxi Record 23-24-25/2023/yellow_tripdata_2023-03.parquet",
+      "error": "`Import pyarrow` failed. pyarrow is required for parquet support. Use pip or conda to install the pyarrow package.",
+      "timestamp": "2026-04-19T08:25:59.384690+00:00"
+    },
+    {
+      "file": "../NYC Yellow Taxi Record 23-24-25/2023/yellow_tripdata_2023-04.parquet",
+      "error": "`Import pyarrow` failed. pyarrow is required for parquet support. Use pip or conda to install the pyarrow package.",
+      "timestamp": "2026-04-19T08:26:00.813144+00:00"
+    },
+    {
+      "file": "../NYC Yellow Taxi Record 23-24-25/2023/yellow_tripdata_2023-05.parquet",
+      "error": "`Import pyarrow` failed. pyarrow is required for parquet support. Use pip or conda to install the pyarrow package.",
+      "timestamp": "2026-04-19T08:26:02.124075+00:00"
+    },
+    {
+      "file": "../NYC Yellow Taxi Record 23-24-25/2023/yellow_tripdata_2023-06.parquet",
+      "error": "`Import pyarrow` failed. pyarrow is required for parquet support. Use pip or conda to install the pyarrow package.",
+      "timestamp": "2026-04-19T08:26:03.199220+00:00"
+    }
+  ]
+}

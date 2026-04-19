@@ -13,7 +13,7 @@ import shutil
 from pathlib import Path
 from datetime import datetime
 
-from src.etl_pipeline import ETLPipeline
+from src.unified_etl_pipeline import UnifiedETLPipeline
 from src.benchmark_etl import ETLBenchmark
 from src.partitioning_strategy import PartitionAnalyzer
 
@@ -32,7 +32,8 @@ class TestETLPipeline:
     def pipeline(self, temp_dir):
         """Create pipeline for testing"""
         db_path = Path(temp_dir) / 'test_taxi.duckdb'
-        return ETLPipeline(
+        return UnifiedETLPipeline(
+            mode='etl',
             db_path=str(db_path),
             pipeline_id='test_pipeline'
         )
