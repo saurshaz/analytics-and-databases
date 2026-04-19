@@ -396,12 +396,20 @@ plan = optimizer.explain_plan('SELECT COUNT(*) FROM yellow_taxi_trips')
 ### Command Reference
 
 ```bash
-make query-stats        # Table statistics & schema
-make query-peek         # Preview first 5 rows
-make query-daily        # Daily summary (7 days)
-make query-vendor       # Vendor performance analysis
-make query-date-range   # Example date-filtered query
-make explain-plan       # Query execution plan
+# Data Loading
+make etl                     # Standard incremental loading
+make partition               # Create Hive-partitioned storage
+make query                   # Run sample analytics
+
+# Query Examples
+make query-stats             # Table statistics & columns
+make query-peek              # Preview first 5 rows
+make query-daily             # Daily summary (7 days)
+make query-vendor            # Vendor performance analysis
+make query-date-range        # Example date-filtered query
+make query-explain-plan      # Query execution plan
+make query-from-partitions   # Query with automatic pruning
+make benchmark-cross-partitions # Cross-partition performance
 ```
 
 ---
@@ -420,12 +428,7 @@ The `UnifiedETLPipeline` class in partition mode converts raw parquet files into
 
 ```bash
 # Convert all years to Hive partitions (takes ~2-3 minutes)
-make etl-partition
-
-# Or partition individual years
-make etl-partition-2023
-make etl-partition-2024
-make etl-partition-2025
+make partition
 
 # Verify structure created
 make show-partition-structure
@@ -735,10 +738,7 @@ make etl-load-2025      # Load 2025 only
 
 ```bash
 # Create Hive partitioned storage for partition pruning
-make etl-partition      # Convert all years to partitioned format
-make etl-partition-2023 # Partition 2023 data only
-make etl-partition-2024 # Partition 2024 data only
-make etl-partition-2025 # Partition 2025 data only
+make partition          # Convert all years to partitioned format
 
 # Verify and query partitioned data
 make show-partition-structure   # Display partition directory tree
@@ -748,24 +748,30 @@ make query-from-partitions      # Run query with automatic partition pruning
 ### Analytics & Queries
 
 ```bash
-make etl-query          # Sample daily query
-make etl-daily          # Detailed 30-day metrics
-make query-stats        # Table statistics
+# Query and analyze data
+make query              # Run sample analytics queries
+make query-stats        # Table statistics & columns
 make query-peek         # Preview data (5 rows)
 make query-daily        # Daily summary (7 days)
-make query-vendor       # Vendor performance
-make query-date-range   # Date-range query example
-make explain-plan       # Query execution plan
+make query-vendor       # Vendor performance analysis
+make query-date-range   # Query by date range (Jan 2024 example)
+make query-explain-plan # Query execution plan analysis
+make benchmark-cross-partitions # Cross-partition query performance
 ```
 
 ### Testing & Monitoring
 
 ```bash
+# Testing
 make test-etl           # Run all ETL tests
 make test-multiwriter   # Test multi-writer coordination
+make test-targets       # Test all make targets
 make demo               # Interactive demo
-make registry-status    # Show registry status
-make registry-cleanup   # Clean old locks
+
+# Monitoring
+make registry-status    # Show active locks & registry status
+make registry-cleanup   # Clean old lock entries
+make show-metrics       # Display pipeline metrics
 ```
 
 ### Cleanup

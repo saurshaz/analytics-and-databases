@@ -25,7 +25,7 @@ class TestMakeTargets:
 
     def get_venv_python(self, project_root: Path) -> str:
         """Get path to venv python, ensuring it exists"""
-        venv_python = project_root / ".venv" / "bin" / "python"
+        venv_python = project_root / "venv" / "bin" / "python"
         if not venv_python.exists():
             # Fall back to system python if venv doesn't exist
             return "python3"
@@ -49,7 +49,7 @@ class TestMakeTargets:
     def test_venv_create(self, project_root):
         """Test venv-create target"""
         # Remove existing venv if it exists
-        venv_path = project_root / ".venv"
+        venv_path = project_root / "venv"
         if venv_path.exists():
             import shutil
             shutil.rmtree(venv_path, ignore_errors=True)
@@ -188,7 +188,7 @@ class TestUnifiedETLPipelineAPI:
 
     def get_venv_python(self, project_root: Path) -> str:
         """Get path to venv python, ensuring it exists"""
-        venv_python = project_root / ".venv" / "bin" / "python"
+        venv_python = project_root / "venv" / "bin" / "python"
         if not venv_python.exists():
             return "python3"
         return str(venv_python)
@@ -361,7 +361,7 @@ class TestModuleExports:
 
     def get_venv_python(self, project_root: Path) -> str:
         """Get path to venv python"""
-        venv_python = project_root / ".venv" / "bin" / "python"
+        venv_python = project_root / "venv" / "bin" / "python"
         if not venv_python.exists():
             return "python3"
         return str(venv_python)
@@ -423,7 +423,7 @@ class TestConfigurationSystem:
 
     def get_venv_python(self, project_root: Path) -> str:
         """Get path to venv python"""
-        venv_python = project_root / ".venv" / "bin" / "python"
+        venv_python = project_root / "venv" / "bin" / "python"
         if not venv_python.exists():
             return "python3"
         return str(venv_python)
@@ -466,7 +466,7 @@ class TestDemosAndScripts:
 
     def get_venv_python(self, project_root: Path) -> str:
         """Get path to venv python"""
-        venv_python = project_root / ".venv" / "bin" / "python"
+        venv_python = project_root / "venv" / "bin" / "python"
         if not venv_python.exists():
             return "python3"
         return str(venv_python)
@@ -500,7 +500,7 @@ class TestIntegration:
 
     def get_venv_python(self, project_root: Path) -> str:
         """Get path to venv python"""
-        venv_python = project_root / ".venv" / "bin" / "python"
+        venv_python = project_root / "venv" / "bin" / "python"
         if not venv_python.exists():
             return "python3"
         return str(venv_python)
@@ -532,9 +532,11 @@ class TestIntegration:
             'venv-create', 'venv-install', 'clean',
             'etl', 'partition', 'query', 'validate',
             'etl-load-2023', 'etl-load-2024', 'etl-load-2025',
-            'test-etl', 'test-multiwriter',
+            'test-etl', 'test-multiwriter', 'test-targets',
             'registry-status', 'show-metrics',
             'query-stats', 'query-peek', 'query-daily',
+            'query-vendor', 'query-date-range', 'query-explain-plan',
+            'query-from-partitions', 'benchmark-cross-partitions',
             'help'
         ]
         

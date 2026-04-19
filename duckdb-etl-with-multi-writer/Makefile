@@ -1,10 +1,15 @@
-.PHONY: venv-create venv-install etl partition query validate \
+.PHONY: venv-create venv-install clean \
+        etl partition query validate both \
         etl-load-all etl-load-2023 etl-load-2024 etl-load-2025 \
-        etl-dev etl-fast etl-compact etl-status test-multiwriter test-etl demo \
-        registry-status registry-cleanup query-stats query-peek query-daily query-vendor query-date-range \
-        query-explain-plan help clean show-metrics show-partition-structure
+        etl-dev etl-fast etl-compact etl-status \
+        query-stats query-peek query-daily query-vendor query-date-range \
+        query-explain-plan query-from-partitions benchmark-cross-partitions \
+        show-partition-structure show-metrics \
+        registry-status registry-cleanup \
+        test-multiwriter test-etl test-targets demo \
+        help
 
-VENV := .venv
+VENV := venv
 PYTHON := $(VENV)/bin/python
 PIP := $(VENV)/bin/pip
 
@@ -107,6 +112,18 @@ query-explain-plan:
 	@echo "📋 Query execution plan analysis..."
 	$(PYTHON) -c "from src.query_optimizer import QueryOptimizer; opt = QueryOptimizer(); plan = opt.explain_plan('SELECT COUNT(*) FROM yellow_taxi_trips'); print(plan); opt.close()"
 
+benchmark-cross-partitions:
+	@echo "🔄 Running cross-partition query benchmarks..."
+	@echo "   Testing: adjacent partitions, non-adjacent partitions, year-boundary, aggregations"
+	@echo ""
+	$(PYTHON) scripts/benchmark_cross_partitions.py
+
+query-from-partitions:
+	@echo "🔍 Query partitioned data with automatic partition pruning..."
+	@echo "   Demonstrates DuckDB auto-pruning on year/month/day structure"
+	@echo ""
+	$(PYTHON) scripts/query_partitioned_data.py
+
 show-partition-structure:
 	@echo "📂 Partitioned data directory structure:"
 	@if [ -d data/processed ]; then \
@@ -182,12 +199,14 @@ help:
 	@echo "  make etl-status     - Show current configuration"
 	@echo ""
 	@echo "📊 ANALYTICS & QUERIES:"
-	@echo "  make query-stats       - Table statistics & columns"
-	@echo "  make query-peek        - Preview data (first 5 rows)"
-	@echo "  make query-daily       - Daily summary (last 7 days)"
-	@echo "  make query-vendor      - Vendor performance analysis"
-	@echo "  make query-date-range  - Query by date range"
-	@echo "  make query-explain-plan - Query execution plan"
+	@echo "  make query-stats              - Table statistics & columns"
+	@echo "  make query-peek               - Preview data (first 5 rows)"
+	@echo "  make query-daily              - Daily summary (last 7 days)"
+	@echo "  make query-vendor             - Vendor performance analysis"
+	@echo "  make query-date-range         - Query by date range (Jan 2024 example)"
+	@echo "  make query-explain-plan       - Query execution plan"
+	@echo "  make query-from-partitions    - Query partitioned data (w/ auto pruning)"
+	@echo "  make benchmark-cross-partitions - Cross-partition query performance"
 	@echo ""
 	@echo "📂 PARTITIONED DATA:"
 	@echo "  make show-partition-structure - Show partition directory tree"

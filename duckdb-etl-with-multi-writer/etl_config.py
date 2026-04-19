@@ -30,7 +30,7 @@ class ETLConfig:
     
     PRESETS = {
         'development': {
-            'raw_dir': 'NYC Yellow Taxi Record 23-24-25',
+            'raw_dir': '../NYC Yellow Taxi Record 23-24-25',
             'processed_dir': 'data/processed',
             'max_workers': 2,
             'compression': 'snappy',
@@ -40,7 +40,7 @@ class ETLConfig:
             'description': 'Local development (2 workers, snappy compression)'
         },
         'production': {
-            'raw_dir': 'NYC Yellow Taxi Record 23-24-25',
+            'raw_dir': '../NYC Yellow Taxi Record 23-24-25',
             'processed_dir': 'data/processed',
             'max_workers': 8,
             'compression': 'snappy',
@@ -50,7 +50,7 @@ class ETLConfig:
             'description': 'Production (8 workers, snappy compression, dedup enabled)'
         },
         'fast': {
-            'raw_dir': 'NYC Yellow Taxi Record 23-24-25',
+            'raw_dir': '../NYC Yellow Taxi Record 23-24-25',
             'processed_dir': 'data/processed',
             'max_workers': 8,
             'compression': 'uncompressed',
@@ -60,7 +60,7 @@ class ETLConfig:
             'description': 'Maximum speed (8 workers, no compression)'
         },
         'compact': {
-            'raw_dir': 'NYC Yellow Taxi Record 23-24-25',
+            'raw_dir': '../NYC Yellow Taxi Record 23-24-25',
             'processed_dir': 'data/processed',
             'max_workers': 4,
             'compression': 'gzip',
