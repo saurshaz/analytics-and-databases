@@ -1,4 +1,4 @@
-.PHONY: help install setup setup-postgres setup-duckdb test benchmark benchmark-duckdb validation clean docs test-help setup-pg-duckdb verify-pg-duckdb test-pg-duckdb-setup test-pg-duckdb-performance benchmark-pg-duckdb compare-pg-duckdb-results test-pg-duckdb benchmark-pg-duckdb-full
+.PHONY: help install setup setup-postgres setup-duckdb setup-clickhouse test benchmark benchmark-duckdb benchmark-clickhouse benchmark-duckdb-vs-clickhouse validation clean docs test-help setup-pg-duckdb verify-pg-duckdb test-pg-duckdb-setup test-pg-duckdb-performance benchmark-pg-duckdb compare-pg-duckdb-results test-pg-duckdb benchmark-pg-duckdb-full parquet-discover parquet-import parquet-import-inspect parquet-import-strict parquet-import-dryrun parquet-import-sample parquet-import-sample-to-ch parquet-test
 
 # ============================================================================
 # HELP TARGET
@@ -6,19 +6,32 @@
 # Display available Make targets and their descriptions
 # Usage: make help
 help:
-	@echo "analytical-db-knockout — DuckDB vs PostgreSQL Benchmarking"
+	@echo "analytical-db-knockout — DuckDB vs PostgreSQL vs ClickHouse Benchmarking"
 	@echo ""
 	@echo "Setup:"
-	@echo "  make install          Install dependencies"
-	@echo "  make setup            Setup both PostgreSQL and DuckDB databases"
-	@echo "  make setup-postgres   Initialize PostgreSQL database (Docker)"
-	@echo "  make setup-duckdb     Initialize DuckDB database (from parquet files)"
+	@echo "  make install                Install dependencies"
+	@echo "  make setup                  Setup all databases (PostgreSQL, DuckDB, ClickHouse)"
+	@echo "  make setup-postgres         Initialize PostgreSQL database (Docker)"
+	@echo "  make setup-duckdb           Initialize DuckDB database (from parquet files)"
+	@echo "  make setup-clickhouse       Initialize ClickHouse database (Docker)"
+	@echo ""
+	@echo "Parquet Import to ClickHouse:"
+	@echo "  make parquet-discover            Find all Parquet files"
+	@echo "  make parquet-import              Batch import NYC Taxi data ⭐ (RECOMMENDED)"
+	@echo "  make parquet-import-inspect      Preview schema before importing"
+	@echo "  make parquet-import-strict       Strict mode (stops on first error)"
+	@echo "  make parquet-import-dryrun       Dry-run preview (no actual import)"
+	@echo "  make parquet-import-sample       Create & import sample"
+	@echo "  make parquet-import-sample-to-ch Import sample file"
+	@echo "  make parquet-test                Run import tests"
 	@echo ""
 	@echo "Testing & Benchmarking:"
-	@echo "  make test             Run all tests (validation + benchmarks)"
-	@echo "  make benchmark        Run comprehensive benchmark suite"
-	@echo "  make benchmark-duckdb Run DuckDB-only benchmark"
-	@echo "  make validation       Run query correctness validation"
+	@echo "  make test                   Run all tests (validation + benchmarks)"
+	@echo "  make benchmark              Run DuckDB vs PostgreSQL benchmark"
+	@echo "  make benchmark-duckdb       Run DuckDB-only benchmark"
+	@echo "  make benchmark-clickhouse   Run ClickHouse-only benchmark"
+	@echo "  make benchmark-duckdb-vs-clickhouse  Compare DuckDB vs ClickHouse on 20 queries"
+	@echo "  make validation             Run query correctness validation"
 	@echo ""
 	@echo "pg_duckdb (PostgreSQL + DuckDB vectorized execution):"
 	@echo "  make setup-pg-duckdb              Create pg_duckdb extension in database"
@@ -30,10 +43,10 @@ help:
 	@echo "  make compare-pg-duckdb-results    Display performance comparison results"
 	@echo ""
 	@echo "Cleanup:"
-	@echo "  make clean            Remove benchmark results"
+	@echo "  make clean                  Remove benchmark results"
 	@echo ""
 	@echo "Documentation:"
-	@echo "  make docs             Show documentation files"
+	@echo "  make docs                   Show documentation files"
 
 # ============================================================================
 # SETUP TARGETS - Initialize Environments
@@ -49,8 +62,8 @@ install:
 # Prerequisite: docker-compose.yml must be in parent directory
 # Creates: ../nyc_yellow_taxi.duckdb and nyc_taxi PostgreSQL database
 # Usage: make setup
-setup: setup-postgres setup-duckdb
-	@echo "\n✅ Both databases are ready!"
+setup: setup-postgres setup-duckdb setup-clickhouse
+	@echo "\n✅ All databases are ready!"
 	@echo "   Run 'make benchmark' to compare performance"
 
 # Initialize PostgreSQL 17 container with nyc_taxi database
@@ -74,6 +87,20 @@ setup-postgres:
 setup-duckdb:
 	@echo "Setting up DuckDB database..."
 	python3 ../setup_duckdb.py
+
+# Initialize ClickHouse container with NYC Taxi data
+# Features: Uses official ClickHouse server image with OLAP optimizations
+# Runs: docker compose up for ClickHouse service
+# Requires: ../docker-compose.yml (in parent directory) with clickhouse service
+# Runs: ../setup_clickhouse.py to create schema and load data from DuckDB/Parquet/CSV
+# Data sources (priority order): DuckDB > Parquet > CSV
+# Usage: make setup-clickhouse
+setup-clickhouse:
+	@echo "Setting up ClickHouse OLAP database..."
+	cd .. && docker compose up -d clickhouse
+	@echo "Waiting for ClickHouse to be ready..."
+	sleep 10
+	python3 ../setup_clickhouse.py
 
 # ============================================================================
 # TESTING & BENCHMARKING TARGETS
@@ -105,6 +132,37 @@ benchmark:
 benchmark-duckdb:
 	@echo "Running DuckDB-only performance benchmark...\n"
 	python3 -m pytest -m benchmark benchmarks/test_duckdb_queries.py -v -s
+
+# ClickHouse-only performance analysis
+# Executes: Profile ClickHouse query execution times across all 20 queries
+# Requires: ClickHouse initialized (run 'make setup-clickhouse' first)
+# Output: Performance timing data, statistics, and sample query results
+# Saves results to: benchmarks/results/clickhouse_results.json
+# Useful for: Benchmarking OLAP performance, comparing with PostgreSQL/DuckDB
+# Usage: make benchmark-clickhouse
+benchmark-clickhouse:
+	@echo "Running ClickHouse-only performance benchmark...\n"
+	python3 -m pytest -m benchmark benchmarks/test_clickhouse_queries.py::TestClickHouseQueries::test_benchmark_all_queries -v -s
+
+# ClickHouse query correctness validation
+# Verifies: All 20 queries execute successfully on ClickHouse without errors
+# Requires: ClickHouse initialized (run 'make setup-clickhouse' first)
+# Output: Query correctness validation results
+# Usage: make test-clickhouse
+test-clickhouse:
+	@echo "Running ClickHouse query correctness tests...\n"
+	python3 -m pytest -m benchmark benchmarks/test_clickhouse_queries.py -v -s
+
+# DuckDB vs ClickHouse 3-way performance benchmark
+# Compares: DuckDB (in-process) vs ClickHouse (OLAP server) on all 20 queries
+# Requires: Both DuckDB and ClickHouse initialized (run 'make setup' first)
+# Measures: Execution times, speedup factors, aggregate statistics
+# Output: Side-by-side comparison, performance metrics, JSON results
+# Saves results to: benchmarks/results/duckdb_vs_clickhouse_results.json
+# Usage: make benchmark-duckdb-vs-clickhouse
+benchmark-duckdb-vs-clickhouse:
+	@echo "Running DuckDB vs ClickHouse performance benchmark...\n"
+	python3 -m pytest -m benchmark benchmarks/test_duckdb_vs_clickhouse.py::TestDuckDBVsClickHouse::test_benchmark_all_queries -v -s
 
 # Query correctness validation
 # Verifies: All 20 queries execute successfully without errors
@@ -219,3 +277,98 @@ docs:
 	@echo "  - blog/BLOG_POST.md              Full performance analysis"
 	@echo "  - docs/ARCHITECTURE.md           Technical deep-dive"
 	@echo "  - README.md                      Project overview"
+
+# ============================================================================
+# PARQUET IMPORT TARGETS - Import Parquet files to ClickHouse
+# ============================================================================
+
+# Discover all Parquet files in NYC Yellow Taxi Record directory
+# Recursively scans: ../NYC Yellow Taxi Record 23-24-25/
+# Output: Lists all Parquet files found with file sizes
+# Useful for: Understanding data structure before import
+# Usage: make parquet-discover
+parquet-discover:
+	@echo "Discovering Parquet files in NYC Yellow Taxi Record directory..."
+	@python3 -c "from parquet_importer import ParquetImporter; \
+	importer = ParquetImporter(); \
+	files = importer.discover_parquet_files('../NYC Yellow Taxi Record 23-24-25'); \
+	print(f'Found {len(files)} files')" || echo "Directory not found. Verify path: ../NYC Yellow Taxi Record 23-24-25/"
+
+# Batch import all Parquet files from NYC Taxi directory to ClickHouse
+# Requires: ClickHouse running (make setup-clickhouse)
+# Imports: All .parquet files from ../NYC Yellow Taxi Record 23-24-25/ (recursive)
+# Target table: yellow_taxi_trips
+# Method: Native protocol (fastest)
+# Features: Automatic schema evolution (fills missing columns with NULL), skip errors, validation
+# Usage: make parquet-import
+parquet-import:
+	@echo "Batch importing NYC Yellow Taxi Parquet files to ClickHouse..."
+	@echo "Starting ClickHouse if not running..."
+	@cd .. && docker compose up -d clickhouse 2>/dev/null || true
+	@sleep 2
+	python import_nyc_taxi_batch.py --skip-errors --validate
+
+# Batch import with schema inspection (show what will be imported)
+# Requires: ClickHouse running
+# Shows: Schema comparison between table and Parquet files
+# Usage: make parquet-import-inspect
+parquet-import-inspect:
+	@echo "Inspecting schema differences before import..."
+	python import_nyc_taxi_batch.py --inspect-schema --dry-run
+
+# Batch import with detailed progress (strict mode - stops on first error)
+# Requires: ClickHouse running
+# Useful for: Debugging specific file issues
+# Usage: make parquet-import-strict
+parquet-import-strict:
+	@echo "Batch importing with strict mode (stops on first error)..."
+	@cd .. && docker compose up -d clickhouse 2>/dev/null || true
+	@sleep 2
+	python import_nyc_taxi_batch.py --validate
+
+# Dry-run batch import (show what would be imported without importing)
+# Requires: ClickHouse connection
+# Useful for: Previewing import before actual execution
+# Usage: make parquet-import-dryrun
+parquet-import-dryrun:
+	@echo "Dry-run: Discovering what would be imported..."
+	python import_nyc_taxi_batch.py --dry-run
+
+# Create and import sample Parquet file for testing
+# Generates: sample_taxi_100k.parquet (100K rows of test data)
+# Imports: Sample data to yellow_taxi_trips table
+# Useful for: Quick testing without full dataset
+# Usage: make parquet-import-sample
+parquet-import-sample:
+	@echo "Generating and importing sample Parquet file..."
+	@python3 examples_parquet_import.py
+	@echo "Sample file created: sample_taxi_100k.parquet"
+	@echo "Now run: make parquet-import-sample-to-ch"
+
+# Import sample Parquet file to ClickHouse
+# Target table: yellow_taxi_trips
+# Data: sample_taxi_100k.parquet (100K rows)
+# Usage: make parquet-import-sample-to-ch
+parquet-import-sample-to-ch:
+	@if [ ! -f sample_taxi_100k.parquet ]; then \
+		echo "Sample file not found. Run: make parquet-import-sample"; \
+	else \
+		echo "Importing sample Parquet file..."; \
+		python3 parquet_importer.py sample_taxi_100k.parquet --table yellow_taxi_trips --method 2 --validate; \
+	fi
+
+# Run Parquet import tests
+# Executes: Unit tests for all import methods
+# Requires: ClickHouse running
+# Tests: Connection, file discovery, single file import, batch import, data validation
+# Usage: make parquet-test
+parquet-test:
+	@echo "Running Parquet import tests..."
+	python3 -m pytest benchmarks/test_parquet_import.py -v -s
+
+# Quick import workflow: setup ClickHouse → discover files → import sample → test
+# Combines: setup-clickhouse + parquet-discover + parquet-import-sample-to-ch + parquet-test
+# Useful for: Full end-to-end validation of Parquet import functionality
+# Usage: make parquet-setup-all
+parquet-setup-all: setup-clickhouse parquet-discover parquet-import-sample parquet-import-sample-to-ch parquet-test
+	@echo "\n✅ Parquet import setup complete!"

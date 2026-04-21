@@ -24,7 +24,9 @@
       "sql": "WITH daily_metrics AS (SELECT DATE(tpep_pickup_datetime) AS trip_date, VendorID, COUNT(*) trip_count, SUM(total_amount) daily_revenue FROM yellow_taxi_trips WHERE total_amount > 0 GROUP BY DATE(tpep_pickup_datetime), VendorID) SELECT trip_date, VendorID, trip_count, daily_revenue, ROUND((daily_revenue - LAG(daily_revenue) OVER (PARTITION BY VendorID ORDER BY trip_date)) / NULLIF(LAG(daily_revenue) OVER (PARTITION BY VendorID ORDER BY trip_date), 0) * 100, 2) growth_pct FROM daily_metrics ORDER BY trip_date DESC;",
       "postgres_sql": "WITH daily_metrics AS (SELECT DATE(tpep_pickup_datetime) trip_date, VendorID, COUNT(*) trip_count, SUM(total_amount) daily_revenue FROM yellow_taxi_trips WHERE total_amount > 0 GROUP BY DATE(tpep_pickup_datetime), VendorID) SELECT trip_date, VendorID, trip_count, daily_revenue, ROUND(CAST((daily_revenue - LAG(daily_revenue) OVER (PARTITION BY VendorID ORDER BY trip_date)) AS numeric) / CAST(NULLIF(LAG(daily_revenue) OVER (PARTITION BY VendorID ORDER BY trip_date), 0) AS numeric) * 100, 2) growth_pct FROM daily_metrics ORDER BY trip_date DESC;",
       "sqlite_sql": "WITH daily_metrics AS (SELECT DATE(tpep_pickup_datetime) trip_date, VendorID, COUNT(*) trip_count, SUM(total_amount) daily_revenue FROM yellow_taxi_trips WHERE total_amount > 0 GROUP BY DATE(tpep_pickup_datetime), VendorID) SELECT trip_date, VendorID, trip_count, daily_revenue, ROUND((daily_revenue - LAG(daily_revenue) OVER (PARTITION BY VendorID ORDER BY trip_date)) / NULLIF(LAG(daily_revenue) OVER (PARTITION BY VendorID ORDER BY trip_date), 0) * 100, 2) growth_pct FROM daily_metrics ORDER BY trip_date DESC;",
-      "pg_duckdb_sql": "WITH daily_metrics AS (SELECT DATE(tpep_pickup_datetime) AS trip_date, VendorID, COUNT(*) trip_count, SUM(total_amount) daily_revenue FROM yellow_taxi_trips WHERE total_amount > 0 GROUP BY DATE(tpep_pickup_datetime), VendorID) SELECT trip_date, VendorID, trip_count, daily_revenue, ROUND(CAST((daily_revenue - LAG(daily_revenue) OVER (PARTITION BY VendorID ORDER BY trip_date)) / NULLIF(LAG(daily_revenue) OVER (PARTITION BY VendorID ORDER BY trip_date), 0) * 100 AS numeric), 2) growth_pct FROM daily_metrics ORDER BY trip_date DESC;", "notes": "Q1: LAG window for growth. PostgreSQL needs ::numeric casting on division. pg_duckdb uses DuckDB syntax with CAST for type safety."
+      "clickhouse_sql": "WITH daily_metrics AS (SELECT CAST(tpep_pickup_datetime AS Date) AS trip_date, VendorID, COUNT(*) trip_count, SUM(total_amount) daily_revenue FROM yellow_taxi_trips WHERE total_amount > 0 GROUP BY trip_date, VendorID) SELECT trip_date, VendorID, trip_count, daily_revenue, ROUND((daily_revenue - LAG(daily_revenue) OVER (PARTITION BY VendorID ORDER BY trip_date)) / nullIf(LAG(daily_revenue) OVER (PARTITION BY VendorID ORDER BY trip_date), 0) * 100, 2) growth_pct FROM daily_metrics ORDER BY trip_date DESC;",
+      "pg_duckdb_sql": "WITH daily_metrics AS (SELECT DATE(tpep_pickup_datetime) AS trip_date, VendorID, COUNT(*) trip_count, SUM(total_amount) daily_revenue FROM yellow_taxi_trips WHERE total_amount > 0 GROUP BY DATE(tpep_pickup_datetime), VendorID) SELECT trip_date, VendorID, trip_count, daily_revenue, ROUND(CAST((daily_revenue - LAG(daily_revenue) OVER (PARTITION BY VendorID ORDER BY trip_date)) / NULLIF(LAG(daily_revenue) OVER (PARTITION BY VendorID ORDER BY trip_date), 0) * 100 AS numeric), 2) growth_pct FROM daily_metrics ORDER BY trip_date DESC;",
+      "notes": "Q1: LAG window for growth. PostgreSQL needs ::numeric casting on division. pg_duckdb uses DuckDB syntax with CAST for type safety. ClickHouse: nullIf() instead of NULLIF."
     },
     {
       "id": 2,
@@ -34,7 +36,8 @@
       "sql": "SELECT DATE(tpep_pickup_datetime) trip_date, EXTRACT(HOUR FROM tpep_pickup_datetime) pickup_hour, COUNT(*) trips, SUM(total_amount) revenue, ROUND(AVG(total_amount), 2) avg_fare FROM yellow_taxi_trips GROUP BY DATE(tpep_pickup_datetime), EXTRACT(HOUR FROM tpep_pickup_datetime) ORDER BY trip_date DESC, pickup_hour;",
       "postgres_sql": "SELECT DATE(tpep_pickup_datetime) trip_date, EXTRACT(HOUR FROM tpep_pickup_datetime)::integer pickup_hour, COUNT(*) trips, SUM(total_amount) revenue, ROUND(AVG(total_amount)::numeric, 2) avg_fare FROM yellow_taxi_trips GROUP BY DATE(tpep_pickup_datetime), EXTRACT(HOUR FROM tpep_pickup_datetime) ORDER BY trip_date DESC, pickup_hour;",
       "sqlite_sql": "SELECT DATE(tpep_pickup_datetime) trip_date, CAST(strftime('%H', tpep_pickup_datetime) AS INTEGER) pickup_hour, COUNT(*) trips, SUM(total_amount) revenue, ROUND(AVG(total_amount), 2) avg_fare FROM yellow_taxi_trips GROUP BY DATE(tpep_pickup_datetime), strftime('%H', tpep_pickup_datetime) ORDER BY trip_date DESC, pickup_hour;",
-      "notes": "Q2: Hourly grouping. PostgreSQL: EXTRACT returns double, cast to int. SQLite: use strftime('%H')."
+      "clickhouse_sql": "SELECT CAST(tpep_pickup_datetime AS Date) AS trip_date, toHour(tpep_pickup_datetime) AS pickup_hour, COUNT(*) trips, SUM(total_amount) revenue, ROUND(AVG(total_amount), 2) avg_fare FROM yellow_taxi_trips GROUP BY trip_date, pickup_hour ORDER BY trip_date DESC, pickup_hour;",
+      "notes": "Q2: Hourly grouping. PostgreSQL: EXTRACT returns double, cast to int. SQLite: use strftime('%H'). ClickHouse: toDate() + toHour()."
     },
     {
       "id": 3,
@@ -54,7 +57,8 @@
       "sql": "SELECT passenger_count, COUNT(*) trips, ROUND(AVG(date_diff('minute', tpep_pickup_datetime, tpep_dropoff_datetime)), 2) duration_mins, ROUND(AVG(trip_distance / NULLIF(date_diff('hour', tpep_pickup_datetime, tpep_dropoff_datetime), 0)), 2) speed_mph FROM yellow_taxi_trips WHERE passenger_count > 0 AND passenger_count <= 9 GROUP BY passenger_count ORDER BY duration_mins DESC;",
       "postgres_sql": "SELECT passenger_count, COUNT(*) trips, ROUND(AVG(EXTRACT(EPOCH FROM (tpep_dropoff_datetime - tpep_pickup_datetime)) / 60)::numeric, 2) duration_mins, ROUND(AVG(CAST(trip_distance AS numeric) / NULLIF(EXTRACT(EPOCH FROM (tpep_dropoff_datetime - tpep_pickup_datetime)) / 3600, 0))::numeric, 2) speed_mph FROM yellow_taxi_trips WHERE passenger_count > 0 AND passenger_count <= 9 GROUP BY passenger_count ORDER BY duration_mins DESC;",
       "sqlite_sql": "SELECT passenger_count, COUNT(*) trips, ROUND(AVG((CAST((julianday(tpep_dropoff_datetime) - julianday(tpep_pickup_datetime)) * 24 * 60 AS REAL))), 2) duration_mins, ROUND(AVG(CAST(trip_distance AS REAL) / NULLIF((julianday(tpep_dropoff_datetime) - julianday(tpep_pickup_datetime)) * 24, 0)), 2) speed_mph FROM yellow_taxi_trips WHERE passenger_count > 0 AND passenger_count <= 9 GROUP BY passenger_count ORDER BY duration_mins DESC;",
-      "pg_duckdb_sql": "SELECT passenger_count, COUNT(*) trips, ROUND(AVG(EXTRACT(EPOCH FROM (tpep_dropoff_datetime - tpep_pickup_datetime)) / 60)::numeric, 2) duration_mins, ROUND(AVG(CAST(trip_distance AS numeric) / NULLIF(EXTRACT(EPOCH FROM (tpep_dropoff_datetime - tpep_pickup_datetime)) / 3600, 0))::numeric, 2) speed_mph FROM yellow_taxi_trips WHERE passenger_count > 0 AND passenger_count <= 9 GROUP BY passenger_count ORDER BY duration_mins DESC;", "notes": "Q4: Time interval calculations. DuckDB: date_diff(). PG: EXTRACT(EPOCH). SQLite: julianday(). pg_duckdb uses PostgreSQL EXTRACT for compatibility."
+      "clickhouse_sql": "SELECT passenger_count, COUNT(*) trips, ROUND(AVG(dateDiff('minute', tpep_pickup_datetime, tpep_dropoff_datetime)), 2) duration_mins, ROUND(AVG(trip_distance / nullIf(dateDiff('hour', tpep_pickup_datetime, tpep_dropoff_datetime), 0)), 2) speed_mph FROM yellow_taxi_trips WHERE passenger_count > 0 AND passenger_count <= 9 GROUP BY passenger_count ORDER BY duration_mins DESC;",
+      "pg_duckdb_sql": "SELECT passenger_count, COUNT(*) trips, ROUND(AVG(EXTRACT(EPOCH FROM (tpep_dropoff_datetime - tpep_pickup_datetime)) / 60)::numeric, 2) duration_mins, ROUND(AVG(CAST(trip_distance AS numeric) / NULLIF(EXTRACT(EPOCH FROM (tpep_dropoff_datetime - tpep_pickup_datetime)) / 3600, 0))::numeric, 2) speed_mph FROM yellow_taxi_trips WHERE passenger_count > 0 AND passenger_count <= 9 GROUP BY passenger_count ORDER BY duration_mins DESC;", "notes": "Q4: Time interval calculations. DuckDB: date_diff(). PG: EXTRACT(EPOCH). SQLite: julianday(). ClickHouse: dateDiff(). pg_duckdb uses PostgreSQL EXTRACT for compatibility."
     },
     {
       "id": 5,
@@ -74,6 +78,7 @@
       "sql": "WITH monthly AS (SELECT DATE_TRUNC('month', tpep_pickup_datetime) trip_month, SUM(total_amount) revenue FROM yellow_taxi_trips GROUP BY DATE_TRUNC('month', tpep_pickup_datetime)) SELECT trip_month, revenue, ROUND(AVG(revenue) OVER (ORDER BY trip_month ROWS BETWEEN 2 PRECEDING AND CURRENT ROW), 2) rolling_3m FROM monthly ORDER BY trip_month;",
       "postgres_sql": "WITH monthly AS (SELECT DATE_TRUNC('month', tpep_pickup_datetime) trip_month, SUM(total_amount) revenue FROM yellow_taxi_trips GROUP BY DATE_TRUNC('month', tpep_pickup_datetime)) SELECT trip_month, revenue, ROUND(CAST(AVG(revenue) OVER (ORDER BY trip_month ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS numeric), 2) rolling_3m FROM monthly ORDER BY trip_month;",
       "sqlite_sql": "WITH monthly AS (SELECT strftime('%Y-%m-01', tpep_pickup_datetime) trip_month, SUM(total_amount) revenue FROM yellow_taxi_trips GROUP BY strftime('%Y-%m-01', tpep_pickup_datetime)) SELECT trip_month, revenue, ROUND(AVG(revenue) OVER (ORDER BY trip_month ROWS BETWEEN 2 PRECEDING AND CURRENT ROW), 2) rolling_3m FROM monthly ORDER BY trip_month;",
+      "clickhouse_sql": "WITH monthly AS (SELECT CAST(CAST(tpep_pickup_datetime AS Date) - dayOfMonth(tpep_pickup_datetime) + 1 AS Date) AS trip_month, SUM(total_amount) revenue FROM yellow_taxi_trips GROUP BY trip_month) SELECT trip_month, revenue, ROUND(AVG(revenue) OVER (ORDER BY trip_month ROWS BETWEEN 2 PRECEDING AND CURRENT ROW), 2) rolling_3m FROM monthly ORDER BY trip_month;",
       "notes": "Q6: Monthly grouping with window frames. DuckDB/PG: DATE_TRUNC. SQLite: strftime('%Y-%m-01')."
     },
     {
@@ -84,7 +89,8 @@
       "sql": "SELECT VendorID, DATE_TRUNC('month', tpep_pickup_datetime) trip_month, COUNT(*) trips, PERCENTILE_CONT(0.9) WITHIN GROUP (ORDER BY trip_distance) p90_dist FROM yellow_taxi_trips GROUP BY VendorID, DATE_TRUNC('month', tpep_pickup_datetime) ORDER BY trip_month DESC LIMIT 100;",
       "postgres_sql": "SELECT VendorID, DATE_TRUNC('month', tpep_pickup_datetime) trip_month, COUNT(*) trips, PERCENTILE_CONT(0.9) WITHIN GROUP (ORDER BY trip_distance) p90_dist FROM yellow_taxi_trips GROUP BY VendorID, DATE_TRUNC('month', tpep_pickup_datetime) ORDER BY trip_month DESC LIMIT 100;",
       "sqlite_sql": "SELECT VendorID, strftime('%Y-%m-01', tpep_pickup_datetime) trip_month, COUNT(*) trips, AVG(trip_distance) p90_dist FROM yellow_taxi_trips GROUP BY VendorID, strftime('%Y-%m-01', tpep_pickup_datetime) ORDER BY trip_month DESC LIMIT 100;",
-      "pg_duckdb_sql": "SELECT VendorID, DATE_TRUNC('month', tpep_pickup_datetime) trip_month, COUNT(*) trips, PERCENTILE_CONT(0.9) WITHIN GROUP (ORDER BY trip_distance) p90_dist FROM yellow_taxi_trips GROUP BY VendorID, DATE_TRUNC('month', tpep_pickup_datetime) ORDER BY trip_month DESC LIMIT 100;", "notes": "Q7: PERCENTILE_CONT (DuckDB/PG only). SQLite approximates with AVG() and uses strftime(). pg_duckdb uses DuckDB syntax."
+      "clickhouse_sql": "SELECT VendorID, CAST(CAST(tpep_pickup_datetime AS Date) - dayOfMonth(tpep_pickup_datetime) + 1 AS Date) AS trip_month, COUNT(*) trips, quantile(0.9)(trip_distance) p90_dist FROM yellow_taxi_trips GROUP BY VendorID, trip_month ORDER BY trip_month DESC LIMIT 100;",
+      "pg_duckdb_sql": "SELECT VendorID, DATE_TRUNC('month', tpep_pickup_datetime) trip_month, COUNT(*) trips, PERCENTILE_CONT(0.9) WITHIN GROUP (ORDER BY trip_distance) p90_dist FROM yellow_taxi_trips GROUP BY VendorID, DATE_TRUNC('month', tpep_pickup_datetime) ORDER BY trip_month DESC LIMIT 100;", "notes": "Q7: PERCENTILE_CONT (DuckDB/PG only). SQLite approximates with AVG() and uses strftime(). ClickHouse: quantile(0.9)(). pg_duckdb uses DuckDB syntax."
     },
     {
       "id": 8,
@@ -104,7 +110,8 @@
       "sql": "SELECT CASE WHEN fare_amount<10 THEN '<$10' WHEN fare_amount<20 THEN '$10-20' ELSE '$20+' END fare_bin, COUNT(*) trips, ROUND(AVG(tip_amount/NULLIF(fare_amount,0))*100,2) tip_pct FROM yellow_taxi_trips WHERE fare_amount>0 GROUP BY fare_bin ORDER BY tip_pct DESC;",
       "postgres_sql": "SELECT CASE WHEN fare_amount<10 THEN '<$10' WHEN fare_amount<20 THEN '$10-20' ELSE '$20+' END fare_bin, COUNT(*) trips, ROUND(AVG(CAST(tip_amount AS numeric)/CAST(NULLIF(fare_amount,0) AS numeric))*100,2) tip_pct FROM yellow_taxi_trips WHERE fare_amount>0 GROUP BY fare_bin ORDER BY tip_pct DESC;",
       "sqlite_sql": "SELECT CASE WHEN fare_amount<10 THEN '<$10' WHEN fare_amount<20 THEN '$10-20' ELSE '$20+' END fare_bin, COUNT(*) trips, ROUND(AVG(CAST(tip_amount AS REAL)/NULLIF(fare_amount,0))*100,2) tip_pct FROM yellow_taxi_trips WHERE fare_amount>0 GROUP BY fare_bin ORDER BY tip_pct DESC;",
-      "notes": "Q9: CASE binning with division. PostgreSQL: ::numeric. SQLite: CAST to REAL."
+      "clickhouse_sql": "SELECT CASE WHEN fare_amount<10 THEN '<$10' WHEN fare_amount<20 THEN '$10-20' ELSE '$20+' END fare_bin, COUNT(*) trips, ROUND(AVG(tip_amount/nullIf(fare_amount,0))*100,2) tip_pct FROM yellow_taxi_trips WHERE fare_amount>0 GROUP BY fare_bin ORDER BY tip_pct DESC;",
+      "notes": "Q9: CASE binning with division. PostgreSQL: ::numeric. SQLite: CAST to REAL. ClickHouse: implicit coercion with nullIf()."
     },
     {
       "id": 10,
@@ -124,7 +131,8 @@
       "sql": "SELECT VendorID, COUNT(*) trips, SUM(total_amount) revenue, ROUND(SUM(tip_amount)/NULLIF(SUM(total_amount),0)*100,2) tip_pct FROM yellow_taxi_trips GROUP BY VendorID ORDER BY revenue DESC;",
       "postgres_sql": "SELECT VendorID, COUNT(*) trips, SUM(total_amount) revenue, ROUND(SUM(tip_amount)::numeric/CAST(NULLIF(SUM(total_amount),0) AS numeric)*100,2) tip_pct FROM yellow_taxi_trips GROUP BY VendorID ORDER BY revenue DESC;",
       "sqlite_sql": "SELECT VendorID, COUNT(*) trips, SUM(total_amount) revenue, ROUND(CAST(SUM(tip_amount) AS REAL)/NULLIF(SUM(total_amount),0)*100,2) tip_pct FROM yellow_taxi_trips GROUP BY VendorID ORDER BY revenue DESC;",
-      "notes": "Q11: Vendor aggregation. PostgreSQL: ::numeric. SQLite: CAST to REAL."
+      "clickhouse_sql": "SELECT VendorID, COUNT(*) trips, SUM(total_amount) revenue, ROUND(SUM(tip_amount)/nullIf(SUM(total_amount),0)*100,2) tip_pct FROM yellow_taxi_trips GROUP BY VendorID ORDER BY revenue DESC;",
+      "notes": "Q11: Vendor aggregation. PostgreSQL: ::numeric. SQLite: CAST to REAL. ClickHouse: nullIf()."
     },
     {
       "id": 12,
@@ -184,7 +192,8 @@
       "sql": "WITH mon AS (SELECT DATE_TRUNC('month',tpep_pickup_datetime) mo, SUM(total_amount) rev FROM yellow_taxi_trips GROUP BY DATE_TRUNC('month',tpep_pickup_datetime)) SELECT mo, rev, ROUND((rev-LAG(rev) OVER (ORDER BY mo))/NULLIF(LAG(rev) OVER (ORDER BY mo),0)*100,2) pct_chg FROM mon ORDER BY mo;",
       "postgres_sql": "WITH mon AS (SELECT DATE_TRUNC('month',tpep_pickup_datetime) mo, SUM(total_amount) rev FROM yellow_taxi_trips GROUP BY DATE_TRUNC('month',tpep_pickup_datetime)) SELECT mo, rev, ROUND(CAST((rev-LAG(rev) OVER (ORDER BY mo)) AS numeric)/CAST(NULLIF(LAG(rev) OVER (ORDER BY mo),0) AS numeric)*100,2) pct_chg FROM mon ORDER BY mo;",
       "sqlite_sql": "WITH mon AS (SELECT strftime('%Y-%m-01', tpep_pickup_datetime) mo, SUM(total_amount) rev FROM yellow_taxi_trips GROUP BY strftime('%Y-%m-01', tpep_pickup_datetime)) SELECT mo, rev, ROUND(CAST((rev-LAG(rev) OVER (ORDER BY mo)) AS REAL)/NULLIF(LAG(rev) OVER (ORDER BY mo),0)*100,2) pct_chg FROM mon ORDER BY mo;",
-      "notes": "Q17: MoM with LAG. PostgreSQL: ::numeric. SQLite: strftime() and CAST to REAL."
+      "clickhouse_sql": "WITH mon AS (SELECT CAST(CAST(tpep_pickup_datetime AS Date) - dayOfMonth(tpep_pickup_datetime) + 1 AS Date) AS mo, SUM(total_amount) rev FROM yellow_taxi_trips GROUP BY mo) SELECT mo, rev, ROUND((rev-LAG(rev) OVER (ORDER BY mo))/nullIf(LAG(rev) OVER (ORDER BY mo),0)*100,2) pct_chg FROM mon ORDER BY mo;",
+      "notes": "Q17: MoM with LAG. PostgreSQL: ::numeric. SQLite: strftime() and CAST to REAL. ClickHouse: toStartOfMonth() and nullIf()."
     },
     {
       "id": 18,
@@ -194,7 +203,8 @@
       "sql": "SELECT VendorID, DATE_TRUNC('month',tpep_pickup_datetime) mo, ROUND(SUM(total_amount)/NULLIF(SUM(trip_distance),0),2) rpm FROM yellow_taxi_trips WHERE trip_distance>0 GROUP BY VendorID, DATE_TRUNC('month',tpep_pickup_datetime) ORDER BY mo DESC;",
       "postgres_sql": "SELECT VendorID, DATE_TRUNC('month',tpep_pickup_datetime) mo, ROUND(SUM(total_amount)::numeric/CAST(NULLIF(SUM(trip_distance),0) AS numeric),2) rpm FROM yellow_taxi_trips WHERE trip_distance>0 GROUP BY VendorID, DATE_TRUNC('month',tpep_pickup_datetime) ORDER BY mo DESC;",
       "sqlite_sql": "SELECT VendorID, strftime('%Y-%m-01', tpep_pickup_datetime) mo, ROUND(CAST(SUM(total_amount) AS REAL)/NULLIF(SUM(trip_distance),0),2) rpm FROM yellow_taxi_trips WHERE trip_distance>0 GROUP BY VendorID, strftime('%Y-%m-01', tpep_pickup_datetime) ORDER BY mo DESC;",
-      "notes": "Q18: Efficiency metric. PostgreSQL: ::numeric. SQLite: strftime() and CAST to REAL."
+      "clickhouse_sql": "SELECT VendorID, CAST(CAST(tpep_pickup_datetime AS Date) - dayOfMonth(tpep_pickup_datetime) + 1 AS Date) AS mo, ROUND(SUM(total_amount)/nullIf(SUM(trip_distance),0),2) rpm FROM yellow_taxi_trips WHERE trip_distance>0 GROUP BY VendorID, mo ORDER BY mo DESC;",
+      "notes": "Q18: Efficiency metric. PostgreSQL: ::numeric. SQLite: strftime() and CAST to REAL. ClickHouse: toStartOfMonth() and nullIf()."
     },
     {
       "id": 19,
@@ -204,7 +214,8 @@
       "sql": "WITH daily AS (SELECT DATE(tpep_pickup_datetime) dt, VendorID, SUM(total_amount) rev FROM yellow_taxi_trips GROUP BY DATE(tpep_pickup_datetime), VendorID) SELECT dt, VendorID, rev, ROUND(SUM(rev) OVER (PARTITION BY VendorID ORDER BY dt),2) cumul FROM daily ORDER BY VendorID, dt;",
       "postgres_sql": "WITH daily AS (SELECT DATE(tpep_pickup_datetime) dt, VendorID, SUM(total_amount) rev FROM yellow_taxi_trips GROUP BY DATE(tpep_pickup_datetime), VendorID) SELECT dt, VendorID, rev, ROUND(CAST(SUM(rev) OVER (PARTITION BY VendorID ORDER BY dt) AS numeric),2) cumul FROM daily ORDER BY VendorID, dt;",
       "sqlite_sql": "WITH daily AS (SELECT DATE(tpep_pickup_datetime) dt, VendorID, SUM(total_amount) rev FROM yellow_taxi_trips GROUP BY DATE(tpep_pickup_datetime), VendorID) SELECT dt, VendorID, rev, ROUND(SUM(rev) OVER (PARTITION BY VendorID ORDER BY dt),2) cumul FROM daily ORDER BY VendorID, dt;",
-      "notes": "Q19: Running window frame. PostgreSQL: ::numeric."
+      "clickhouse_sql": "WITH daily AS (SELECT CAST(tpep_pickup_datetime AS Date) AS dt, VendorID, SUM(total_amount) rev FROM yellow_taxi_trips GROUP BY dt, VendorID) SELECT dt, VendorID, rev, ROUND(SUM(rev) OVER (PARTITION BY VendorID ORDER BY dt),2) cumul FROM daily ORDER BY VendorID, dt;",
+      "notes": "Q19: Running window frame. PostgreSQL: ::numeric. ClickHouse: toDate()."
     },
     {
       "id": 20,
