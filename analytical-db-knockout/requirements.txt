@@ -1,5 +1,6 @@
 duckdb>=0.9.0
 psycopg2-binary>=2.9.0
+clickhouse-driver>=0.2.0
 pandas>=1.5.0
 pyarrow>=12.0.0
 click>=8.0.0
