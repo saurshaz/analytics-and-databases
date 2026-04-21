@@ -37,9 +37,38 @@ def check_data_availability():
 
 
 def setup_duckdb():
-    """Create DuckDB database and load parquet files."""
+    """Create DuckDB database and load parquet files (idempotent - skips if exists)."""
     try:
-        # Remove existing database if present
+        # Check if database already exists and has data
+        if DB_PATH.exists():
+            print(f"🔗 DuckDB database already exists at {DB_PATH}")
+            try:
+                con = duckdb.connect(str(DB_PATH))
+                result = con.execute("SELECT COUNT(*) as row_count FROM yellow_taxi_trips").fetchall()
+                row_count = result[0][0]
+                
+                if row_count > 0:
+                    print(f"   ✅ Table 'yellow_taxi_trips' contains {row_count:,} rows")
+                    print(f"   ⚠️  Skipping data load (idempotent - no duplicates)")
+                    
+                    # Display schema info
+                    columns = con.execute("DESCRIBE yellow_taxi_trips").fetchall()
+                    col_count = len(columns)
+                    db_size_mb = DB_PATH.stat().st_size / (1024 * 1024)
+                    
+                    print(f"   Columns: {col_count}")
+                    print(f"   Database size: {db_size_mb:.2f} MB")
+                    
+                    con.close()
+                    return True
+                else:
+                    print(f"   ⚠️  Table exists but is empty, reloading data...")
+                    con.close()
+            except Exception as e:
+                print(f"   ⚠️  Error checking existing database: {e}")
+                print(f"   ♻️  Removing and recreating...")
+        
+        # Remove existing empty/corrupt database
         if DB_PATH.exists():
             print(f"♻️  Removing existing database at {DB_PATH}")
             DB_PATH.unlink()

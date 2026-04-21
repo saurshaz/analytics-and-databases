@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:17-alpine
+    image: pgduckdb/pgduckdb:17-v1.1.1
     container_name: nyc_taxi_pg
     environment:
       POSTGRES_DB: nyc_taxi

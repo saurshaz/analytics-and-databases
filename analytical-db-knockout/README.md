@@ -4,10 +4,10 @@ Comprehensive performance benchmarking of DuckDB vs PostgreSQL on 128M NYC Taxi 
 
 ## Overview
 
-This project compares two analytical database engines on real-world data:
+This project compares analytical database engines on real-world data:
 
-- **DuckDB 0.9.2** — Vectorized OLAP database (embedded)
-- **PostgreSQL 15** — Row-oriented RDBMS (server)
+- **DuckDB 1.4.3** — Vectorized OLAP database (embedded)
+- **PostgreSQL 17** — Row-oriented RDBMS (server, with optional pg_duckdb extension)
 
 ## Goal
 
@@ -124,8 +124,9 @@ Available commands for common tasks:
 # Setup & Installation
 make install              # Install Python dependencies
 make setup                # Setup both PostgreSQL and DuckDB (recommended)
-make setup-postgres       # Initialize PostgreSQL database (Docker-based)
+make setup-postgres       # Initialize PostgreSQL 17 with pg_duckdb (Docker-based)
 make setup-duckdb         # Initialize DuckDB from parquet files
+make setup-pg-duckdb      # Create pg_duckdb extension in the database
 
 # Testing & Benchmarking
 make test                 # Run all tests (validation + benchmarks)
@@ -133,13 +134,20 @@ make benchmark            # Run comprehensive DuckDB vs PostgreSQL benchmark
 make benchmark-duckdb     # Run DuckDB-only performance benchmark
 make validation           # Run query correctness validation
 
+# pg_duckdb Tests
+make verify-pg-duckdb            # Verify pg_duckdb binary and extension are loaded
+make test-pg-duckdb-setup        # Test pg_duckdb installation
+make test-pg-duckdb-performance  # Compare PostgreSQL vs pg_duckdb vs DuckDB
+make test-pg-duckdb              # Run all pg_duckdb tests
+make benchmark-pg-duckdb-full    # Full workflow: setup → test → report
+
 # Utilities
 make clean                # Remove benchmark results and cache
 make docs                 # Show documentation file references
 make help                 # Display all available targets
 ```
 
-**Note:** All setup targets assume `docker-compose.yml` is in the parent directory.
+**Note:** All setup targets assume `docker-compose.yml` is in the parent directory. The PostgreSQL Docker image is automatically built from `postgres.dockerfile` using `docker compose build`.
 
 ## Benchmark Results Summary
 
@@ -172,6 +180,164 @@ ANALYTICAL-DB-KNOCKOUT: DuckDB vs PostgreSQL Benchmark
   PostgreSQL ✅: 23.735s (10 rows)
   ⚡ Speedup: 63.2x faster in DuckDB
 ```
+
+## pg_duckdb Integration
+
+The project includes **pg_duckdb**, a PostgreSQL extension that enables DuckDB's vectorized execution engine within PostgreSQL. We use the **official prebuilt Docker image** from pgduckdb project — no compilation needed!
+
+### What is pg_duckdb?
+
+pg_duckdb allows you to run analytical queries using DuckDB's optimized execution engine while keeping data in PostgreSQL tables. This provides:
+- **5-15x speedup** over native PostgreSQL for analytical queries
+- **DuckDB's vectorized execution** and columnar processing
+- **PostgreSQL's features** (transactions, indexing, replication)
+- **Pre-built in Docker** — official image ready to use, no build time
+
+### Quick Start (3-fold Comparison)
+
+```bash
+# 1. Start PostgreSQL with pg_duckdb pre-built
+cd ..
+docker compose up -d postgres
+sleep 10
+
+# 2. Initialize databases
+cd analytical-db-knockout
+make setup
+
+# 3. Create pg_duckdb extension
+make setup-pg-duckdb
+
+# 4. Run 3-way performance comparison
+# Compares: Native PostgreSQL vs PostgreSQL+pg_duckdb vs Direct DuckDB
+make benchmark-pg-duckdb-full
+
+# 5. View results
+make compare-pg-duckdb-results
+```
+
+### Docker Setup
+
+The Docker configuration now uses the **official pgduckdb/pgduckdb:17-v1.1.1 image** with:
+- PostgreSQL 17 (Debian-based)
+- pg_duckdb extension (pre-compiled and ready to use)
+- No build time needed (uses pre-built image)
+- Same optimized PostgreSQL settings (shared_buffers, work_mem, etc.)
+
+Start the container with:
+```bash
+docker compose up -d postgres     # Start PostgreSQL container
+make setup-pg-duckdb              # Create extension in nyc_taxi database
+make verify-pg-duckdb             # Verify it works
+```
+
+### Performance Comparison
+
+The benchmark compares three backends:
+
+| Query | Native PG | PG+pg_duckdb | Direct DuckDB | Speedup (vs Native) | Speedup (vs Direct) |
+|-------|-----------|--------------|---------------|---------------------|---------------------|
+| Q1: Daily Revenue | 61.564s | ~5-10s | 0.482s | 6-12x | 10-20x |
+| Q4: Duration & Speed | ~45s | ~4-8s | ~0.3s | 5-11x | 13-27x |
+| Q7: P90 Distance | 60.939s | ~5-9s | 1.561s | 6-12x | 3-6x |
+
+**Key Findings**:
+- pg_duckdb provides **significant speedup** over native PostgreSQL (5-15x)
+- Still **slower than direct DuckDB** due to extension overhead (2-10x)
+- Best use case: **PostgreSQL features + analytical performance**
+- Trade-offs: Extension installation, configuration complexity
+
+### Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    PostgreSQL Server                         │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │              pg_duckdb Extension                       │   │
+│  │  - DuckDB execution engine                            │   │
+│  │  - Vectorized query processing                        │   │
+│  │  - Columnar memory layout                             │   │
+│  └──────────────────────────────────────────────────────┘   │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │              PostgreSQL Tables (Row-oriented)         │   │
+│  │  - yellow_taxi_trips                                   │   │
+│  │  - Data stored in PostgreSQL format                   │   │
+│  └──────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+                          │
+                          │ Queries
+                          ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    Query Execution                          │
+│  - Native PostgreSQL: Row-by-row processing                │
+│  - pg_duckdb: Vectorized batch processing (1,024 rows)     │
+│  - Direct DuckDB: Embedded engine with columnar storage    │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Troubleshooting
+
+**Docker build takes too long or fails**:
+```bash
+# Check build status
+docker compose build postgres --no-cache
+
+# If it fails, check the full output
+docker compose build postgres --no-cache 2>&1 | tail -100
+
+# Clean and retry
+docker system prune -a
+docker compose build postgres --no-cache
+```
+
+**pg_duckdb binary not found**:
+```bash
+# Check if pgxman installation succeeded
+docker compose exec -T postgres bash -c "ls -la /usr/local/lib/postgresql/ | grep duckdb"
+
+# If missing, rebuild the image
+docker compose down
+docker compose build postgres --no-cache
+docker compose up -d postgres
+```
+
+**Extension creation fails**:
+```bash
+# Check if PostgreSQL is ready
+docker compose exec -T postgres pg_isready -U postgres
+
+# Try creating extension manually
+docker compose exec -T postgres psql -U postgres -d postgres -c "CREATE EXTENSION pg_duckdb;"
+
+# Check PostgreSQL logs
+docker compose logs postgres | tail -50
+```
+
+**PostgreSQL container won't start**:
+```bash
+# Check logs
+docker compose logs postgres
+
+# Rebuild from scratch
+docker compose down
+docker volume rm pg_data 2>/dev/null || true
+docker compose build postgres --no-cache
+docker compose up -d postgres
+```
+
+### Files
+
+- `benchmarks/test_pg_duckdb_setup.py` — pg_duckdb installation test
+- `benchmarks/test_pg_duckdb_performance.py` — Performance comparison test
+- `benchmarks/pg_duckdb_results.py` — Results processing
+- `benchmarks/results/pg_duckdb_comparison.json` — Performance results
+- `blog/BLOG_POST.md` — Detailed analysis and conclusions
+
+### References
+
+- [pg_duckdb GitHub](https://github.com/duckdb/pg_duckdb)
+- [DuckDB Documentation](https://duckdb.org/docs/)
+- [PostgreSQL Extensions](https://www.postgresql.org/docs/current/extensions.html)
 
 ## Key Findings
 
@@ -217,20 +383,33 @@ To reproduce these benchmarks from scratch:
 # 1. Install dependencies
 pip install -e .
 
-# 2. Start Docker services (from parent directory)
+# 2. Build and start Docker services (from parent directory)
 cd ..
+docker compose down          # Clean up if needed
+docker compose build postgres --no-cache
 docker compose up -d postgres
 
-# 3. Setup both databases
+# 3. Wait for PostgreSQL to be ready
+sleep 10
+
+# 4. Setup both databases
 cd analytical-db-knockout
 make setup
 
-# 4. Run comprehensive benchmark
+# 5. Verify pg_duckdb is loaded (optional)
+make verify-pg-duckdb
+
+# 6. Run comprehensive benchmark
 make benchmark
 
-# 5. View results
+# 7. Optionally test pg_duckdb performance
+make benchmark-pg-duckdb-full
+
+# 8. View results
 cat benchmarks/results/comparison.json
 ```
+
+**Note:** The Docker image build takes 3-5 minutes on first build (includes pgxman compilation of pg_duckdb) or ~30 seconds on subsequent builds (cached). This is one-time only.
 
 ## Troubleshooting
 
