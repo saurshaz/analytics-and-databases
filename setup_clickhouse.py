@@ -41,6 +41,24 @@ CSV_FILE = ROOT_DIR / "yellow_taxi_trips.csv"
 BATCH_SIZE = 100000  # Increased from 50000 for faster loading
 
 
+def resolve_schema_file():
+    """Resolve the ClickHouse schema file location."""
+    candidate_paths = [
+        SCHEMA_FILE,
+        ROOT_DIR / "schema_clickhouse.sql",
+    ]
+
+    for candidate in candidate_paths:
+        if candidate.exists():
+            return candidate
+
+    matches = sorted(ROOT_DIR.rglob("schema_clickhouse.sql"))
+    if matches:
+        return matches[0]
+
+    return None
+
+
 def connect_clickhouse():
     """Create ClickHouse client connection."""
     try:
@@ -67,11 +85,12 @@ def connect_clickhouse():
 
 def create_schema(client):
     """Create ClickHouse schema from SQL file."""
-    if not SCHEMA_FILE.exists():
-        print(f"❌ Schema file not found: {SCHEMA_FILE}")
+    schema_file = resolve_schema_file()
+    if schema_file is None:
+        print(f"❌ Schema file not found. Checked preferred path: {SCHEMA_FILE}")
         sys.exit(1)
 
-    with open(SCHEMA_FILE, "r") as f:
+    with open(schema_file, "r") as f:
         schema_sql = f.read()
 
     # Split by semicolons and execute each statement
