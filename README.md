@@ -64,8 +64,7 @@ NYC Yellow Taxi data is available in the workspace:
 - **Organized by year:** `NYC Yellow Taxi Record 23-24-25/` directory
 - **Pre-loaded databases:**
   - `nyc_yellow_taxi.duckdb` (root)
-  - `analytical-db-knockout/nyc_taxi.duckdb`
-
+  
 ## 🚀 Getting Started
 
 Both projects are independently executable. Start with either:

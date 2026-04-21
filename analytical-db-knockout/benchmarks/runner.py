@@ -262,7 +262,7 @@ def main():
     parser.add_argument("--setup", action="store_true", help="Setup databases")
     parser.add_argument("--run", action="store_true", help="Run benchmarks")
     parser.add_argument("--compare", action="store_true", help="Compare results")
-    parser.add_argument("--duckdb", default="nyc_taxi.duckdb", help="DuckDB path")
+    parser.add_argument("--duckdb", default="../nyc_yellow_taxi.duckdb", help="DuckDB path")
     parser.add_argument("--postgres", help="PostgreSQL DSN")
     
     args = parser.parse_args()
