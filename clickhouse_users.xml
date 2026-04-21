@@ -13,10 +13,12 @@
 
     <users>
         <default>
-            <!-- No password required for default user -->
-            <password></password>
+            <!-- Require a password for the default user; replace before deployment. -->
+            <password>CHANGE_ME_TO_A_STRONG_PASSWORD</password>
             <networks>
-                <ip>::/0</ip>
+                <ip>127.0.0.1</ip>
+                <ip>::1</ip>
+                <ip>172.17.0.0/16</ip>
             </networks>
             <profile>default</profile>
             <quota>default</quota>
